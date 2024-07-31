@@ -1,0 +1,31 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminDashvm;
+
+<div class="modal fade" id="acceptModalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content pt-4 pb-4 border rounded-4">
+
+            <div class="container d-flex flex-column pt-4 pb-4">
+                <div class="container d-flex justify-content-center">
+                    <i class="bi bi-exclamation-circle-fill text-warning modal-icon display-1"></i>
+                </div>
+                <div class="container d-flex justify-content-center fs-4">
+                    Confirmation For Accept Case
+                </div>
+            </div>
+
+            <div class="container pt-2 pb-4 text-center">
+                Are sure you want to accept this request?
+            </div>
+
+            <form class="pb-4 pt-4 d-grid gap-2 col-3 mx-auto d-flex" method="post" onsubmit="AcceptCase()">
+
+                <input type="text" asp-for="@Model.AcceptRequestId" id="clearRequestId" hidden />
+                <input type="text" asp-for="@Model.StatusForName" id="statusForNameId" hidden />
+
+                <button type="submit" class="btn btn-info text-white fw-bold " >Accept</button>
+                <button type="button" class="btn btn-outline-info fw-bold " data-bs-dismiss="modal">Cancel</button>
+
+            </form>
+        </div>
+    </div>
+</div>

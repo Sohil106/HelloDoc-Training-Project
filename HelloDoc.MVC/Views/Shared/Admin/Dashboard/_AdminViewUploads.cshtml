@@ -1,0 +1,273 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminViewUploadsvm
+
+
+
+
+<div class="submit-reuest-div pt-4" id="viewUploadModel">
+
+    <div class="d-flex justify-content-center">
+
+        <div class="w-auto">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <h4> Documents</h4>
+                </div>
+                <div>
+                    @if(Model.CallId == 1)
+                    {
+                        <a class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2" onclick="GetDashboard(@Model.statusForName)">
+                            <span class="d-md-block d-none">
+                                <i class="bi bi-caret-left"></i> Back
+                            </span><span class="d-block d-md-none mx-1"> <i class="bi bi-caret-left"></i> </span>
+                        </a>
+                    }
+                    else if (Model.CallId == 2)
+                    {
+                        <a class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2" onclick="GetPatientRecordExplore(@Model.UserId)">
+                            <span class="d-md-block d-none">
+                                <i class="bi bi-caret-left"></i> Back
+                            </span><span class="d-block d-md-none mx-1"> <i class="bi bi-caret-left"></i> </span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2" onclick="GetProviderDashboard()">
+                            <span class="d-md-block d-none">
+                                <i class="bi bi-caret-left"></i> Back
+                            </span><span class="d-block d-md-none mx-1"> <i class="bi bi-caret-left"></i> </span>
+                        </a>
+                    }
+
+                </div>
+            </div>
+
+
+            <div class="px-3 shadow">
+
+
+                <div class="col-12 mt-2">
+
+                    <p class="pt-3 text-secondary">
+                        Patient Name <br />
+                        <span class="fw-bold" style="font-size:22.32px;color:#00bce7;">@Model.Name</span> 
+                        
+                        @if(Model.ConformationNumber != null)
+                        {
+                            <span>( @Model.ConformationNumber)</span>
+                        }
+                        else
+                        {
+                            <span>(MD051023TETE0001)</span>
+                            
+                        }
+                    </p>
+                    <p class="text-secondary">Check here for any files that you or the doctors of your subsequesnts requestors have attached for you to review</p>
+
+                    <form id="updateForm" method="post" enctype="multipart/form-data" onsubmit="UpdateViewUploads(@Model.RequestId,@Model.statusForName,@Model.CallId)">
+                        <input type="text" asp-for="@Model.RequestId"  hidden/>
+                        <input type="text" asp-for="@Model.statusForName" id="statusForName"  hidden/>
+                        <input type="text" asp-for="@Model.CallId" id="callid" hidden />
+
+                        <div class="col input-group mb-3">
+                            <input type="file" asp-for="@Model.Document" class="form-control" id="inputGroupFile02" hidden onchange="updateFileName(this)">
+                            <input id="upload-name" class="form-control inputFile text-secondary" style="background-color:#f2f2f2c4" type="text" value="" aria-label="readonly input example" readonly>
+                            <label class="input-group-text btn btn-info pt-3 text-white" for="inputGroupFile02">Select File</label>
+                            
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <style>
+                                .upbtn:hover {
+                                    color: white;
+                                }
+                            </style>
+                            <button class="btn btn-outline-info me-md-2 fw-bold d-none ms-2 upbtn" type="submit" id="upload-btn">Upload</button>
+                        </div>
+                            <span class="text-danger" id="errorBox"></span>
+                    </form>
+                </div>
+
+                <div class="px-1 py-2  mb-4 fw-bold h4 d-flex justify-content-between">
+                    <div>
+                        <p>Documents</p>
+                    </div>
+
+                    <div class="">
+                        <a class="btn btn-outline-info downloadAll me-2 w-auto p-2">
+                            <span class="d-md-block d-none">
+                                Download All
+                            </span><i class="bi bi-cloud-download d-block d-md-none mx-1"></i>
+                        </a>
+                        <a class="btn btn-outline-info deleteAll me-2 w-auto p-2">
+                            <span class="d-md-block d-none">
+                                Delete All
+                            </span><i class="bi bi-trash d-block d-md-none mx-1"></i>
+                        </a>
+                        <a class="btn btn-outline-info sendAll w-auto p-2">
+                            <span class="d-md-block d-none">
+                                Send Mail
+                            </span><i class="bi bi bi-envelope d-block d-md-none mx-1"></i>
+                        </a>
+                    </div>
+
+
+                </div>
+                <div class="d-md-block d-none">
+                    <table class="table table-responsive">
+                        <thead class="fw-semibold">
+                            <tr class="">
+                                <td scope="col" class=" mainbg">
+                                    <input type="checkbox" id="check-all" class="checkbox-main checkbox" name="selectall"
+                                           onchange="tickAll()" />
+                                </td>
+                                <td scope="col" class=" mainbg">
+                                    <span class="document-combo">
+                                        <span class="document-name mx-2">
+                                            Documents
+                                        </span>
+                                    </span>
+                                </td>
+                                <td scope="col" class=" mainbg">Upload Date <i class="bi bi-arrow-up"></i>  </td>
+                                <td scope="col" class=" mainbg">Actions</td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var obj in Model.viewUploadsList)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="Mark" value="@obj.requestWiseFileId" class="checkbox fileCheckbox  text-bg-info"
+                                               onchange="allCheck()" />
+                                        <input type="text" asp-for="@obj.RequestId" id="RequestId" hidden />
+
+                                    </td>
+                                    <td class="text-secondary text-wrap">
+                                        <span> <i class="bi bi-file-earmark fw-bold"></i></span>
+                                        <span>@obj.DocumentName</span>
+                                    </td>
+                                    <td class="text-secondary">
+                                        @obj.UploadDate.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>
+                                        <a href="~/content/@obj.DocumentName" download="@obj.DocumentName" class="btn btn-outline-info fw-bold download-btn">
+                                            <i class="bi bi-cloud-download mx-1"></i>
+                                        </a>
+                                        <a class="btn btn-outline-info fw-bold delete-btn" onclick="DeleteFile(@obj.requestWiseFileId,@obj.RequestId, @Model.statusForName,@Model.CallId)">
+                                            <i class="bi bi-trash mx-1"></i>
+                                        </a>
+                                        <a class="btn btn-outline-info fw-bold send-btn" onclick="SendFile(@obj.requestWiseFileId, @obj.RequestId, @Model.statusForName,@Model.CallId)">
+                                            <i class="bi bi bi-envelope mx-1"></i>
+                                        </a>
+
+                                    </td>
+
+
+                                </tr>
+                            }
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-block d-md-none">
+
+                    @foreach (var obj in Model.viewUploadsList)
+                    {
+
+                        <div>
+                            <input type="checkbox" name="Mark" class="checkbox fileCheckbox" />
+                            <span class="ms-2"> <i class="bi bi-file-earmark fw-bold"></i></span>
+                            <span>@obj.DocumentName</span>
+                        </div>
+                        <div class="mt-2">
+                            <p>
+                                @obj.UploadDate.ToString("MMM dd, yyyy")
+                            </p>
+                        </div>
+                        <div class="pb-2">
+                            <a href="~/content/@obj.DocumentName" download="@obj.DocumentName" class="btn btn-outline-info downloadAll me-2 w-auto p-2 downloadbtn">
+                                <i class="bi bi-cloud-download d-block d-md-none mx-1"></i>
+                            </a>
+                            <a class="btn btn-outline-info me-2 w-auto p-2 delete-btn" onclick="DeleteFile(@obj.requestWiseFileId,@obj.RequestId,@Model.CallId)">
+                                <i class="bi bi-trash d-block d-md-none mx-1"></i>
+                            </a>
+                            <a class="btn btn-outline-info w-auto p-2 send-btn" onclick="SendFile(@obj.requestWiseFileId, @obj.RequestId,@Model.CallId)">
+                                <i class="bi bi bi-envelope d-block d-md-none mx-1"></i>
+                            </a>
+                        </div>
+                        <hr />
+
+                    }
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('.downloadAll').click(function () {
+        $('.fileCheckbox:checked').each(function () {
+            var filePath = $(this).closest('tr').find('.download-btn')[0].click();
+
+        });
+    });
+
+    $('.deleteAll').click(function () {
+        $('.fileCheckbox:checked').each(function () {
+            var filePath = $(this).closest('tr').find('.delete-btn')[0].click();
+        });
+    });
+
+    $('.sendAll').click(function () {
+        var requstWiseFileId = [];
+        var RequestId = $('#RequestId').val();
+        var callId = $('#callid').val();
+        var status = $('#statusForName').val();
+
+        $('.fileCheckbox:checked').each(function () {
+            var fileId = $(this).val();
+            console.log(fileId)
+            requstWiseFileId.push(fileId);
+        });
+        console.log(requstWiseFileId)
+        SendFile(requstWiseFileId, RequestId, status, callId)
+    });
+
+
+    function updateFileName(input) {
+        var fileName = input.files[0].name;
+        document.getElementById('upload-name').value = fileName;
+    }
+</script>
+<script>
+
+    $(document).ready(function () {
+        $('#inputGroupFile02').on('change', function () {
+            var fileName = $('#inputGroupFile02').val();
+            var errorMessage = document.getElementById('errorBox');
+
+            if (fileName != "") {
+                if (!(fileName.endsWith('.pdf') || fileName.endsWith('.png') || fileName.endsWith('.jpeg') || fileName.endsWith('.jpg') || fileName.endsWith('.mp4') || fileName.endsWith('.mp3') || fileName.endsWith('.mkv'))) {
+                    errorMessage.innerText = "Upload only pdf, image, audio or video";
+                }
+                else {
+                    errorMessage.innerText = "";
+                    $("#upload-btn").removeClass("d-none");
+                }
+            }
+            else {
+                $("#upload-btn").addClass("d-none");
+            }
+        });
+    });
+
+</script>

@@ -1,0 +1,192 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+@model Data_Access.Dash.PatientDashData
+@{
+    Layout = "~/Views/Shared/_DashLayout.cshtml";
+}
+
+@* @model IEnumerable<Request>; *@
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+@functions {
+    public string GetStatus(int Status)
+    {
+        switch (Status)
+        {
+            case 1: return "New";
+            case 2: return "Pending";
+            case 4: 
+            case 5: return "Active";
+            case 6: return "Conclude";
+            case 3:
+            case 7: 
+            case 8:
+                    return "To Close";
+            case 9: return "Unpaid";
+            case 10: return "Clear";
+            case 11: return "Block";
+            default: return "Unknown";
+        }
+    }
+}
+
+<style>
+    .submitFor {
+        border: 2px solid #00bce7;
+        border-radius: 5px;
+    }
+
+        .submitFor:hover {
+            background-color: #00bce7;
+            color: white;
+        }
+</style>
+
+
+
+
+
+
+<div class="submit-reuest-div py-md-5">
+
+    <div class="px-4 pt-4 mb-4 fw-bold h4">
+        <p>Medical History</p>
+    </div>
+    <div class="s-r-inner-div d-flex flex-column justify-content-center align-items-center">
+
+        <div class="patient-dashboard-div rounded bg-transperent " style="width: 98%;">
+            <div class="my-3 d-flex justify-content-end px-4">
+                <a class="btn new-req-btn" data-bs-toggle="modal" data-bs-target="#hello">
+                    <span class="d-md-block d-none text-capitalize">
+                        Create New Request
+                    </span><i class="bi bi-plus-lg d-block d-md-none mx-1"></i>
+                </a>
+
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="hello" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #00bce7; color: white; border:2px solid #00bce7; border-radius: 5px;">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create New Request</h1>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form>
+                            <input type="hidden" name="" id="redirect-value" value="SubmitForMe">
+                            <div class="modal-body">
+                                <p class="mb-3">Here,I want to create new request for...</p>
+                                <div class="d-flex justify-content-center">
+                                    <a class="moonbut btn me-3 submitFor common-btn create-request-active text-capitalize" onclick="toggleButton(this,'SubmitForMe')">Me</a>
+                                    <a class="moonbut btn submitFor common-btn text-capitalize" onclick="toggleButton(this,'SubmitForSomeOne')"> <span class="">Some One Else</span></a>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn" style="background-color: #00bce7; color: white; border:2px solid #00bce7; border-radius: 5px;" onclick="redirect()">Continue</button>
+                                <button type="button" class="btn" style="color: #00bce7;  border:2px solid #00bce7; border-radius: 5px;"
+                                        data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead class="fw-semibold bg-transparent">
+                    <tr class="d-none d-md-table-row">
+                        <td scope="col" class="px-3 mainbg bg-transparent">Created Date<i class="bi bi-arrow-down"></i></td>
+                        <td scope="col" colspan="2" class="mainbg bg-transparent">Current Status</td>
+                        <td scope="col" class="mainbg bg-transparent">Chat With</td>
+                        <td scope="col" class="text-center mainbg bg-transparent">Document</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @{
+                        var counter = 1;
+                    }
+                    @foreach (var r in Model.dashboardData)
+                    {
+                        <tr data-bs-toggle="collapse" data-bs-target="#taksh@(counter)" class="accordion-toggle border-top bg-transparent" data-requestId="@r.RequestId" data-rid="@r.RequestId">
+                            <td scope="row" class="px-3 bg-transparent"><i class="bi bi-clock d-md-none pe-1 " style="color:  #00bce7"></i><span class="d-md-none pe-1 fw-semibold">Created Date</span>@r.CreatedDate.ToString("MMM dd, yyyy")</td>
+                            <td colspan="2" class="d-none d-md-table-cell bg-transparent">
+                                <span>@GetStatus(r.Status)</span>
+                            </td>
+                            <td class="d-none d-md-table-cell bg-transparent">
+                                <button class='btn border-info text-info chatWithOther me-md-2 text-capitalize' data-receiver="Admin"><i class="fa fa-lock"></i> Admin</button>
+                                @if (r.PhysicianId != null)
+                                {
+                                    <button class='btn border-info  text-info chatWithOther text-capitalize' data-receiver="Physician"><i class="fa fa-stethoscope"></i> Physician</button>
+                                }
+                            </td>
+                            <td class="bg-transparent">
+                                @if (r.DocumentCount > 0)
+                                {
+                                    <div class="d-flex justify-content-center">
+                                        <a asp-controller="PatientSide" asp-route-rid=@r.RequestId asp-action="ViewDoc" class="text-decoration-none">
+                                            <button class="btn border-info text-info fw-bold d-md-block d-none ">
+                                                <div class="px-1 ">
+                                                    <span class="me-1">(@r.DocumentCount)</span>
+                                                    <span class="text-capitalize">Documents</span>
+                                                </div>
+                                            </button>
+                                        </a>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr data-requestId="@r.RequestId" data-rid="@r.RequestId">
+
+                            <td colspan="4" class="p-0 d-table-cell d-md-none td1">
+                                <div class="accordion-body collapse" id="taksh@(counter)">
+                                    <div class="d-flex flex-column mx-3">
+                                        <span class="mt-2">provider : @r.Provider</span>
+                                        <span class="mt-2">
+                                            Current Status : @GetStatus(r.Status)
+                                        </span>
+                                        <span class="mt-2 mb-2">
+                                            <button class='btn border-info text-info chatWithOther me-2 text-capitalize' data-receiver="Admin"><i class="fa fa-lock"></i> Admin</button>
+                                            @if (r.PhysicianId != null)
+                                            {
+                                                <button class='btn border-info  text-info chatWithOther text-capitalize' data-receiver="Physician"><i class="fa fa-stethoscope"></i> Physician</button>
+                                            }
+                                        </span>
+
+                                        @if (r.DocumentCount > 0)
+                                        {
+                                            <span class="mt-2 mb-3">
+                                                <a asp-controller="PatientSide" asp-route-rid=@r.RequestId asp-action="ViewDoc">
+                                                    <button class="btn btn-outline-info fw-bold w-100">
+                                                        <div class="px-1">
+                                                            <span class="me-1">(@r.DocumentCount)</span>
+                                                            <span class="text-capitalize">Documents</span>
+                                                        </div>
+                                                    </button>
+                                                </a>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
+<script src="~/js/chahub.js"></script>

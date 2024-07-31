@@ -1,0 +1,91 @@
+@model HelloDoc.DAL.ViewModels.PatientReqData
+@*
+@{
+    ViewData["Title"] = "Forgot";
+}
+<h1>@ViewData["Title"]</h1> *@
+
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forgot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @*************** toastr cdn ************@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="~/js/custom.js">
+
+</head>
+<body onload="checkMode()">
+    <partial name="_Notification" />
+
+    <div>
+        <button class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2 position-absolute modelogin"
+                id="dark-mode-btn">
+            <i id="moon" class="bi bi-moon"></i>
+            <i id="sun" class="bi bi-sun d-none"></i>
+        </button>
+    </div>
+    <div class="container-fluid">
+        <div class="row justify-content-center ">
+            <div class="col-12">
+                <div class="row mainbox">
+                    <div class="col-12 d-flex flex-column justify-content-center align-items-center mt-4">
+                        <img src="~/images/MainLogo.png" alt="" style="height: 14vh;">
+                    </div>
+                    <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+                        <form method="post" class="col-xl-5 col-11">
+                            <div>
+                                <a asp-action="Login" asp-controller="PatientSide" class="alllinks text-decoration-none"> &lt Back </a>
+                            </div>
+
+                            <h3 class="mt-2 mb-5">Reset Your Password</h3>
+                            <div class="form-group input-boxes">
+                                <div class="form-floating mb-4">
+                                    <input type="email" asp-for="Email" class="form-control input-fields" id="floatingInputEmail" placeholder="name@example.com">
+                                    <label for="floatingInputEmail">Username</label>
+                                </div>
+                                <div class="icons">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-info mt-1 userbuttons text-light">Reset Password</button>
+
+                            <div class="text-center mt-4">@Html.ActionLink("< Back to login", "Login", "PatientSide", null, new { @class = "alllinks text-decoration-none" })</div>
+
+                        </form>
+                    </div>
+
+                    <div class="col-12 d-flex flex-column  justify-content-end mb-1">
+                        <footer class="text-center text-lg-start">
+                            <!-- Copyright -->
+                            <div class="text-center p-3">
+                                Terms of Conditions |
+                                <a class="text-body text-decoration-none" href="https://mdbootstrap.com/">Privacy Policy</a>
+                            </div>
+                            <!-- Copyright -->
+                        </footer>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+            <script src="~/js/dark-theme.js" asp-append-version="true"></script>
+</body>
+</html>
+
+
+@* <a href="index.cshtml" class="alllinks"> &lt Back to login</a> *@

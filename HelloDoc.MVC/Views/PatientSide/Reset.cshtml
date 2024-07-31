@@ -1,0 +1,162 @@
+﻿@model HelloDoc.DAL.ViewModels.Registervm
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forgot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @*************** toastr cdn ************@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="~/js/custom.js">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+</head>
+
+<body onload="checkMode()">
+    <partial name="_Notification" />
+    <div>
+         <button class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2 position-absolute modelogin"
+                        id="dark-mode-btn">
+                    <i id="moon" class="bi bi-moon"></i>
+                    <i id="sun" class="bi bi-sun d-none"></i>
+         </button>
+    </div>
+    <div class="container-fluid">
+        <div class="row justify-content-center mainbg">
+            <div class="col-12">
+                <div class="row mainbox">
+                    <div class="col-12 d-flex flex-column justify-content-center align-items-center mt-4">
+                        <img src="~/images/MainLogo.png" alt="" style="height: 14vh;">
+                    </div>
+                    <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+                        <form class="col-xl-5 col-11" method="post">
+                            <h3 class="mt-2">Reset Password</h3>
+                            <div class="form-group mt-5 input-boxes">
+                                <div class="form-floating">
+                                    <input type="email" asp-for="Email" class="form-control input-fields" id="floatingInputEmail" placeholder="name@example.com">
+                                    <label for="floatingInputEmail">Email</label>
+                                    <span class="text-danger" asp-validation-for="Email"></span>
+                                </div>
+                            </div>
+                            <div class="row mt-4" id="otpdiv">
+                                <div class="form-floating mb-3 position-relative">
+                                    <input asp-for="Otp" type="text" class="form-control input-fields"
+                                           id="floatingOtp" placeholder="******">
+                                    <label for="floatingOtp" class="ms-2">Enter Otp</label>
+                                    <span class="text-danger" asp-validation-for="Otp"></span>
+                                </div>
+                                <div class="d-grid gap-2 mb-3">
+                                    <button type="button" class="btn btn-info userbuttons text-light" onclick="OtpAthentication()"><b>Check Otp</b></button>
+                                </div>
+                                <div class="row d-none" id="errormessage">
+                                    <span class="text-danger fw-semibold text-center">You need to first generate otp</span><br />
+                                    <span class="text-danger fw-semibold text-center">or</span>
+                                    <span class="text-danger fw-semibold text-center">Enter Right Otp or Email</span>
+                                </div>
+                            </div>
+                            <div class="row d-none" id="passfieldDiv">
+                                <div class="form-group input-boxes">
+                                    <div class="form-floating my-4">
+                                        <input type="password" asp-for="Password" class="form-control input-fields" id="floatingInputpass" placeholder="name@example.com">
+                                        <label for="floatingInputpass">Password</label
+                                        <span class="text-danger" asp-validation-for="Password"></span>
+                                        <div class="eye-icon position-absolute top-0 end-0 mx-3 my-2">
+                                             <i class="bi bi-eye-slash fs-4 text-muted mt-1 common-cursor-pointer" id="togglePassword4" onclick="showPassword()" ></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-groupinput-boxes">
+                                    <div class="form-floating mb-4">
+                                        <input type="password" asp-for="ConfirmPassword" class="form-control input-fields" id="floatingInputpass2" placeholder="name@example.com">
+                                        <label for="floatingInputpass2">ConfirmPassword</label>
+                                        <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                                        <div class="eye-icon position-absolute top-0 end-0 mx-3 my-2">
+                                             <i class="bi bi-eye-slash fs-4 text-muted mt-1 common-cursor-pointer" id="togglePassword5" onclick="showConfirmPassword()" ></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info userbuttons text-light">Reset Password</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-12 d-flex flex-column  justify-content-end mb-1">
+                        <footer class="text-center text-lg-start">
+                            <div class="text-center p-3">
+                                Terms of Conditions |
+                                <a class="text-body text-decoration-none" href="https://mdbootstrap.com/">Privacy Policy</a>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_validationscriptspartial" />
+    <script src="~/js/dark-theme.js" asp-append-version="true"></script>
+
+
+<script>
+    function OtpAthentication() {
+        var email = $('#floatingInputEmail').val();
+        var otp = $('#floatingOtp').val();
+
+            $.ajax({
+                url: '@Url.Action("OtpCheck", "PatientSide")',
+                type: "post",
+
+                async: true,
+                datatype: 'html',
+                cache: false,
+                data: { email: email, otp: otp },
+                success: function (result) {
+                    if (result.success) {
+                        $("#otpdiv").addClass("d-none");
+                        $("#passfieldDiv").removeClass("d-none");
+                    }
+                    else {
+                        $("#otpdiv").removeClass("d-none");
+                        $("#passfieldDiv").addClass("d-none");
+                        $("#errormessage").removeClass("d-none");
+                    }
+                    },
+                error: function () {
+                    Swal.fire("Oops", "Something Went Wrong", "error");
+                }
+            });
+        };
+</script>
+<script>
+    function showPassword() {
+
+        const togglePassword = document.querySelector("#togglePassword4");
+        const password = document.querySelector("#floatingInputpass");
+
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        document.getElementById("togglePassword4").classList.toggle('bi-eye');
+    }
+    function showConfirmPassword() {
+
+        const togglePassword = document.querySelector("#togglePassword5");
+        const password = document.querySelector("#floatingInputpass2");
+
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        document.getElementById("togglePassword5").classList.toggle('bi-eye');
+    }
+ </script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+@model HelloDoc.DAL.ViewModels.AdminInvoicingvm
+
+<div class="container">
+    <h4 class="mb-md-3 mb-1 p-1 p-md-2 ">Timesheets</h4>
+
+    <div class="border rounded shadow p-3">
+        <div class="d-lg-flex gap-2 align-items-center mb-3">
+            <div class="form-floating">
+                <select asp-for="@Model.PhysicianId" id="phyDropdown" class="form-select border-1 border-info ps-3" aria-label="Default select example" onchange="GetTimeSheetDetail()">
+                    <option value="" selected disabled>Select Physician</option>
+                    @foreach (var obj in Model.PhysiciansList!.ToList())
+                    {
+                        <option value="@obj.PhysicianId">
+                            @obj.FirstName @obj.LastName
+                        </option>
+                    }
+                </select>
+                <label for="phyDropdown">Select Physician</label>
+            </div>
+
+            <div class="form-floating" id="biWeeklyId">
+                <select id="searchByTimeperiod" class="form-select border-1 border-info TimesheetperiodDropdown ps-3" aria-label="Default select example" onchange="GetTimeSheetDetail()">
+                    <option value="" selected disabled>Select Timeslot</option>
+                </select>
+                <label for="searchByTimeperiod">Search by Timesheetperiod</label>
+            </div>
+        </div>
+        <p id="selectanyPhy"></p>
+    </div>
+
+    @if (Model.TimesheetsList != null)
+    {
+        @if (Model.TimesheetsList.Count != 0 && Model.TimesheetsList.Select(i => i.IsApproved).First() != true)
+        {
+            <div class="border rounded shadow p-3 mt-5">
+                <h4 class="mb-md-3 mb-1 p-1 p-md-2 ">Pending Bi-Weekly timesheet</h4>
+                @if (Model.TimesheetsList.Select(i => i.IsFinalize).First() == true)
+                {
+                    <div class="d-lg-block d-none">
+                        <table class="table TimesheetPeriodTable">
+                            <thead class="rounded table-active">
+                                <tr>
+                                    <th style="background: transparent;">Start Date</th>
+                                    <th style="background: transparent;">End Date</th>
+                                    <th style="background: transparent;">Status</th>
+                                    <th style="background: transparent;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var obj in @Model.TimesheetsList)
+                                {
+                                    <tr class="align-middle">
+                                        <td>@obj.StartDate</td>
+                                        <td>@obj.EndDate</td>
+                                        <td>
+                                            @if (obj.IsApproved == false)
+                                            {
+                                                <p>Pending</p>
+                                            }
+                                            else
+                                            {
+                                                <p>Active</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-info" onclick="GetAdminFinalizeTimeSheet()">
+                                                Approve
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                
+                else
+                {
+                    <p class="p-1 p-md-2"><span>@Model.PhysicianName</span></p>
+                }
+            </div>
+        }
+        else if (Model.TimesheetsList.Count != 0 && Model.TimesheetsList.Select(i => i.IsApproved).First() == true)
+        {
+            <div class="mt-5">
+                <div class="border rounded shadow p-3">
+                    <div class="table-responsive d-lg-block d-none">
+                        <table class="table TimesheetPeriodTable">
+                            <thead class="rounded table-active">
+                                <tr>
+                                    <th style="background: transparent;">Shift Date</th>
+                                    <th style="background: transparent;">Shift</th>
+                                    <th class="text-center" style="background: transparent;">Nightshift Weekend</th>
+                                    <th style="background: transparent;">Houscall</th>
+                                    <th style="background: transparent;">Phone Consults</th>
+                                    <th style="background: transparent;">Houscall Nights Weekend</th>
+                                    <th style="background: transparent;">Phone Consults Nights Weekend</th>
+                                    <th style="background: transparent;">Batch Testing</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var obj in @Model.Timesheetdetails!)
+                                {
+                                    <tr class="align-middle">
+                                        <td>@obj.TimesheetDate.ToString("MMM dd, yyyy")</td>
+                                        <td>@(obj.TotalHours != null ? obj.TotalHours : "0"  )</td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input checkbox fileCheckbox" disabled
+                                            @(obj.IsWeekend == true ? "checked" : "") />
+                                        </td>
+                                        <td>@(obj.NumberOfHouseCall != null ? obj.NumberOfHouseCall : "0")</td>
+                                        <td>@(obj.NumberOfPhoneCall != null ? obj.NumberOfPhoneCall : "0")</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="p-3 mt-5 border rounded shadow">
+                    <h4 class="mb-md-3 mb-1 p-1 p-md-2 ">Timesheet Reimbursement</h4>
+                    <div class="table-responsive d-lg-block d-none">
+                        <table class="table ReimbursementTable">
+                            <thead class="rounded table-active">
+                                <tr>
+                                    <th style="background: transparent;">Date</th>
+                                    <th style="background: transparent;">Item</th>
+                                    <th style="background: transparent;">Amount</th>
+                                    <th style="background: transparent;">Bill</th>
+                                    <th style="background: transparent;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var obj in @Model.Timesheetdetailreimbursements!)
+                                {
+                                    <tr class="align-middle">
+                                        <td>@obj.TimeSheetDate?.ToString("MMM dd, yyyy")</td>
+                                        <td>@obj.ItemName</td>
+                                        <td>@obj.Amount</td>
+                                        <td>@obj.Bill</td>
+                                        <td>
+                                            @if (@obj.Bill != null)
+                                            {
+                                                <a type="button" class="btn btn-outline-info" target="_blank" href="~/content/@obj.Bill">
+                                                    View
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="border rounded shadow p-3 mt-5">
+                <h4 class="mb-md-3 mb-1 p-1 p-md-2 ">Pending Bi-Weekly timesheet</h4>
+                <p class="p-1 p-md-2"> <span>@Model.PhysicianName</span></p>
+            </div>
+        }
+    }
+    else
+        {
+           <script>
+               document.getElementById('selectanyPhy').innerHTML = "Please Select Physician And Date Slot";
+           </script>
+        }
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.ReimbursementTable').DataTable({
+            "initComplete": function (settings, json) {
+
+                $('#my-search-input2').val(settings.oPreviousSearch.sSearch);
+
+                $('#my-search-input2').on('keyup', function () {
+                    var searchValue = $(this).val();
+                    settings.oPreviousSearch.sSearch = searchValue;
+                    settings.oApi._fnReDraw(settings);
+                });
+            },
+            "pageLength": 5,
+            pagingType: "full",
+
+            language: {
+                oPaginate: {
+                    sNext: '<i class="bi bi-caret-right-fill text-info"></i>',
+                    sPrevious: '<i class="bi bi-caret-left-fill text-info"></i>'
+
+                }
+            }
+        });
+        $('.dataTables_length').hide();
+        $('.dataTables_filter').hide();
+    });
+</script>
+
+<script>
+    timePeriodForSelect();
+
+    function timePeriodForSelect() {
+        var dropdown = document.getElementById("searchByTimeperiod");
+        var currentDate = new Date();
+        var currentYear = currentDate.getFullYear();
+        var currentMonth = currentDate.getMonth() + 1; 
+        dropdown.innerHTML = ""; 
+
+        for (var month = 1; month <= currentDate.getMonth() + 1; month++) {
+            var daysInMonth = new Date(currentYear, month, 0).getDate();
+
+            var option1 = document.createElement("option");
+            option1.value = month + "-1";
+            option1.text = "1/" + month + "/" + currentYear + " - 15/" + month + "/" + currentYear;
+            dropdown.appendChild(option1);
+
+            var option2 = document.createElement("option");
+            option2.value = month + "-2";
+            option2.text = "16/" + month + "/" + currentYear + " - " + daysInMonth + "/" + month + "/" + currentYear;
+            dropdown.appendChild(option2);
+        }
+    }
+</script>

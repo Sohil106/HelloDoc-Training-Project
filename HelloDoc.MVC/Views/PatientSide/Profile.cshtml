@@ -1,0 +1,178 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+@model Data_Access.Dash.PatientDashData;
+
+@{
+    Layout = "~/Views/Shared/_DashLayout.cshtml";
+}
+
+<div class="submit-reuest-div pt-4">
+    <div class="s-r-inner-div d-flex flex-column justify-content-center align-items-center">
+
+        <div class="patient-dashboard-div rounded  mb-5" style="width: 75%;">
+            <div class="px-1   mb-4 fw-bold h4 mainbg d-flex justify-content-between">
+                <div>
+                    <p>Profile</p>
+                </div>
+                <div>
+                    <a class="btn new-req-btn" asp-action="Dashboard" asp-controller="PatientSide">
+                        <span class="d-md-block d-none text-capitalize">
+                            <i class="bi bi-caret-left-fill"></i> Back
+                        </span><span class="d-block d-md-none mx-1"><i class="bi bi-caret-left-fill"></i></span>
+                    </a>
+                </div>
+            </div>
+            <form class="shadow p-5 mb-5" style="display: flex;flex-direction: column;justify-content: space-around;" asp-action="Profile" method="post" enctype="multipart/form-data" id="myform">
+
+                <div class="row">
+                    <div class="">
+                        <h5>General Information</h5>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3 ">
+                            <input type="text" asp-for="@Model.profileData.Firstname" class="input-disable form-control " id="floating1" placeholder="First Name">
+                            <label for="floating1" class="text-secondary">First Name</label>
+                            <span asp-validation-for="@Model.profileData.Firstname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3">
+                            <input type="text" asp-for="@Model.profileData.LastName" class="input-disable form-control" id="floating2" placeholder="Last Name">
+                            <label for="floating2">Last Name</label>
+                            <span asp-validation-for="@Model.profileData.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3">
+                            @{
+                                string max = DateTime.Now.ToString("yyyy-MM-dd");
+                            }
+                            <input type="date" max="@max" class="input-disable form-control" asp-for="@Model.profileData.BirthDate" id="floating3">
+                            <label for="floating3">Date of Birth</label>
+                            <span asp-validation-for="@Model.profileData.BirthDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <h5 class="mt-3">Patient Contact Information</h3>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3">
+                            <input id="phone" asp-for="@Model.profileData.PhoneNumber" type="tel" class="input-disable form-control" style="height:57px;" placeholder="Phone Number" />
+                            <label for="phone">Phone Number</label>
+                            <span asp-validation-for="@Model.profileData.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3 ">
+                            <input type="email" id="email" onblur="checkEmail()" asp-for="@Model.profileData.Email" class=" form-control" id="floating4" placeholder="name@example.com" disabled>
+                            <label for="floating4">Email</label>
+                            @* <span asp-validation-for="@Model.profileData.Email" class="text-danger"></span> *@
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <h5 class="mt-3">Patient Location</h3>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3">
+                            <input type="text" asp-for="@Model.profileData.Street" class="input-disable form-control" id="floatingInput7" placeholder="Street">
+                            <label for="floatingInput7">Street</label>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3">
+                            <input type="text" asp-for="@Model.profileData.City" class="input-disable form-control" id="floatingInput8" placeholder="City">
+                            <label for="floatingInput8">City</label>
+                            <span asp-validation-for="@Model.profileData.City" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 mt-2">
+                        <div class="form-floating mb-3">
+                            <input type="text" asp-for="@Model.profileData.State" class="input-disable form-control" id="floatingInput9" placeholder="State">
+                            <label for="floatingInput9">State</label>
+                            <span asp-validation-for="@Model.profileData.State" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 mt-2">
+                        <div class="form-floating mb-3">
+                            <input type="text" asp-for="@Model.profileData.Zipcode" class="input-disable form-control" id="floatingInput10" placeholder="Zip Code">
+                            <label for="floatingInput10">Zip Code</label>
+                            <span asp-validation-for="@Model.profileData.Zipcode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 mt-2">
+                        <button type="button" style="border-radius: 5px;border: 1px solid #00bce7;height: 58px;padding: 10px;width: fit-content;background-color:transparent;">
+                            <a href="https://www.google.com/maps/search/?api=1&query= + @Model.profileData.State" target="_blank" class="text-decoration-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" style="color:#00bce7" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                </svg>
+                                <span style="color:#00bce7">Map</span>
+                            </a>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-2 ">
+                        <div class="d-flex justify-content-end">
+                            <div class="xyz">
+                                <button class="border-0 bg-transparent" id="editBtn" type="button" onclick="enableFields()">
+                                    <a class="moonbut btn btn-info px-4 text-capitalize text-light">
+                                        Edit
+                                    </a>
+                                </button>
+                            </div>
+                            <div class="xyz mx-3">
+                                <button class="border-0 bg-transparent" id="submitBtn">
+                                    <a class="moonbut btn btn-info text-capitalize text-light">
+                                        Submit
+                                    </a>
+                                </button>
+                            </div>
+                            <div class="xyz">
+                                <button class="border-0 bg-transparent" id="cancelBtn" type="reset" onclick="disableFields()">
+                                    <a class="moonbut btn border-info border-2 text-capitalize text-info">
+                                        Cancel
+                                    </a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<partial name="_validationscriptspartial" />
+
+
+<script>
+    function disableFields() {
+        document.querySelectorAll('.input-disable ').forEach(function (element) {
+            element.disabled = true;
+        });
+
+        // Hide the submit and cancel buttons, show the edit button
+        document.getElementById('submitBtn').style.display = 'none';
+        document.getElementById('cancelBtn').style.display = 'none';
+        document.getElementById('editBtn').style.display = 'block';
+
+    }
+
+    function enableFields() {
+        document.querySelectorAll('.input-disable ').forEach(function (element) {
+            element.disabled = false;
+        });
+
+        // Show the submit and cancel buttons, hide the edit button
+        document.getElementById('submitBtn').style.display = 'block';
+        document.getElementById('cancelBtn').style.display = 'block';
+        document.getElementById('editBtn').style.display = 'none';
+    }
+    disableFields();
+</script>
+

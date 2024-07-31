@@ -1,0 +1,278 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminDashvm
+
+@{
+    ViewData["Title"] = "ViewCase";
+}
+
+@functions {
+    public string GetTabletype(int Status)
+    {
+        switch (Status)
+        {
+            case 1: return "New";
+            case 2: return "Pending";
+            case 3: return "To Closed";
+            case 4: return "Active";
+            case 5: return "Active";
+            case 6: return "Conclude";
+            case 7: return "To Closed";
+            case 8: return "To Closed";
+            case 9: return "Unpaid";
+            default: return "Unknown";
+        }
+    }
+    public string GetTableColorClass(int RequstTypeId)
+    {
+        switch (RequstTypeId)
+        {
+            case 1: return "green";
+            case 2: return "orange";
+            case 3: return "blue";
+            case 4: return "pink";
+            default: return "green";
+        }
+    }
+
+    public string GetRequestBy(int RequstTypeId)
+    {
+        switch (RequstTypeId)
+        {
+            case 1: return "Patient";
+            case 2: return "Family/Friend";
+            case 3: return "Concierge";
+            case 4: return "Business";
+            default: return "Vip";
+        }
+    }
+}
+
+<div class="row d-flex justify-content-center mt-5">
+    <div class="col-md-8 col-11">
+        <form action="" method="post" id="viewCaseDataForm" onsubmit="UpdateViewCaseRecords(@Model.viewCaseModel.RequestId)">
+            <input type="text" asp-for="@Model.viewCaseModel.RequestId" hidden />
+            @* <input type="text" asp-for="@Model.StatusForName" id="statusForName" hidden /> *@
+            <div class="d-flex justify-content-between">
+                <div class="">
+                    <h5>
+                        @GetTabletype(Model.StatusForName) Request
+                        <span class="badge @GetTableColorClass(@Model.viewCaseModel.RequestTypeId)-badge rounded-pill "><small>@GetRequestBy(Model.viewCaseModel.RequestTypeId)</small></span>
+                    </h5>
+                </div>
+
+                @if(Model.CallId == 1)
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2" onclick="GetDashboard(@Model.StatusForName)">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+                else if (Model.CallId == 2)
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2" onclick="GetPatientRecordExplore(@Model.viewCaseModel.UserId)">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+                else 
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2" onclick="GetProviderDashboard()">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+            </div>
+
+            <div class="row">
+                <div>
+                    <h5 class="mt-3">Patient Information</h3>
+                </div>
+
+                <div class="col-xl-12 mt-2">
+                    <div>Confirmation Number </div>
+                    <div class="mt-1 confirmnum">
+                        @if (Model.viewCaseModel.ConformNum != null)
+                        {
+                            <span>@Model.viewCaseModel.ConformNum</span>
+                        }
+                        else
+                        {
+                            <span>MD051023TETE0001</span>
+                        }
+                    </div>
+
+                </div>
+
+                <div class="col-xl-12 mt-4">
+                    <div class="form-floating">
+                        <textarea asp-for="@Model.viewCaseModel.PatientNotes" class="form-control mb-3" placeholder="Leave a comment here" id="floatingTextarea"
+                                  style="height: 100px" disabled></textarea>
+                        <label for="floatingTextarea">Patient Notes</label>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-2">
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.viewCaseModel.FirstName" type="text" class=" form-control " id="floating1" placeholder="First Name" disabled>
+                        <label for="floating1">First Name</label>
+                    </div>
+
+                </div>
+                <div class="col-xl-6 mt-2">
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.viewCaseModel.LastName" type="text" class="form-control" id="floating2" placeholder="Last Name" disabled>
+                        <label for="floating2">Last Name</label>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-2">
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.viewCaseModel.BirthDate" type="date" class="form-control" id="floating3" disabled>
+                        <label for="floating3">Date of Birth</label>
+                    </div>
+
+                </div>
+                <div class="col-xl-5 mt-2">
+                    <div class="form-floating mb-3">                
+                        <input asp-for="@Model.viewCaseModel.PhoneNumber" id="phone" type="tel" class="input-disable form-control" disabled />
+                        <label for="phone">Phone Number</label>
+                    </div>
+                    <span class="text-danger" asp-validation-for="@Model.viewCaseModel.PhoneNumber"></span>
+                </div>
+                <div class="col-xl-1 mt-2">
+                    <a href="tel:@Model.viewCaseModel.PhoneNumber" class="text-decoration-none">
+                        <button type="button" class="map-btn">
+                            <i class="bi bi-telephone-fill text-info"></i>
+                        </button>
+                    </a>
+
+                </div>
+                <div class="col-xl-6 mt-2">
+                    <div class="form-floating mb-3 ">
+                        <input asp-for="@Model.viewCaseModel.Email" type="email" id="email" class=" form-control" id="floating4" placeholder="name@example.com" disabled>
+                        <label for="floating4">Email</label>
+                        <span class="text-danger" asp-validation-for="@Model.viewCaseModel.Email"></span>
+                    </div>
+                </div>
+                @if (Model.StatusForName != 1)
+                {
+                    <div class="form-floating mb-3 col-xl-1">
+                        <button type="button" class="btn text-white btn-info fw-bold w-100 h-100" id="editBtn" style="display : block" onclick="enableFields()">
+                            Edit
+                        </button>
+                        <button type="submit" class="btn text-white btn-info fw-bold w-100 h-100" id="submitBtn" style="display : none">
+                            Submit
+                        </button>
+                    </div>
+                }
+            </div>
+
+
+            <div class="row">
+                <div>
+                    <h5 class="mt-3">Location Information</h3>
+                </div>
+                <div class="col-xl-6 mt-2">
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.viewCaseModel.Region" type="text" class="form-control" id="floatingInput7" placeholder="Region" disabled>
+                        <label for="floatingInput7">Region</label>
+                    </div>
+                </div>
+                <div class="col-xl-5 mt-2">
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.viewCaseModel.BusinessAddress" type="text" class="form-control" id="floatingInput10" placeholder="Business Name/Address" disabled>
+                        <label for="floatingInput10">Business Name/Address</label>
+                    </div>
+                </div>
+                <div class="col-xl-1 mt-2">
+                    <a class="btn border-info map-btn" href="https://www.google.com/maps/search/?api=1&query= + @Model.viewCaseModel.BusinessAddress" target="_blank">
+                            <i class="bi bi-geo-alt map-logo"></i>
+                        </a>
+                </div>
+                <div class="col-xl-6 mt-2">
+                    <div class="form-floating mb-3">
+                        <input asp-for="@Model.viewCaseModel.Room" type="text" class="form-control" id="floatingInput8" placeholder="City" disabled>
+                        <label for="floatingInput8">Room #</label>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-12 mt-2 mb-3">
+
+
+
+                    <div class="d-flex justify-content-end">
+
+                        @if (Model.StatusForName == 1 && Model.CallId == 1)
+                        {
+                            <button class="me-4" type="button" onclick="AssignModel(@Model.viewCaseModel.RequestId,@Model.StatusForName)" style="color:azure; border-radius: 10%; height: 35px;width: 80px; border-color:#00bce7; background-color: #00bce7;">
+                                Assign
+                            </button>
+
+                            <button class="alllinks me-4" id="cancelBtn" type="button" onclick="CancelModal(@Model.viewCaseModel.RequestId,@Model.StatusForName)" style="border-radius: 10%; height: 35px;width:80px ; border-color:#00bce7; background-color: transparent;">
+                                Cancel
+                            </button>
+                        }
+                        @if(Model.CallId == 3 || Model.CallId == 2)
+                        {
+                            <button class="me-4" type="button" id="submitBtn" onclick="ViewNotes(@Model.viewCaseModel.RequestId,@Model.StatusForName,@Model.CallId)" style="color:azure; border-radius: 10%; height: 35px; border-color:#00bce7; background-color: #00bce7;">
+                                View Notes
+                            </button>
+
+                        }
+                        else
+                        {
+                            <button class="me-4" type="button" id="submitBtn" onclick="ViewNotes(@Model.viewCaseModel.RequestId,@Model.StatusForName)" style="color:azure; border-radius: 10%; height: 35px; border-color:#00bce7; background-color: #00bce7;">
+                                View Notes
+                            </button>
+                        }
+
+                           
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
+
+@* --------------------------------------------------------------------------------------------------------- *@
+
+<script>
+    function enableFields() {
+        document.querySelectorAll('.input-disable ').forEach(function (element) {
+            element.disabled = false;
+        });
+
+        // Show the submit button, hide the edit button
+        document.getElementById('submitBtn').style.display = 'block';
+        document.getElementById('editBtn').style.display = 'none';
+    }
+
+
+    // function disableFields() {
+    //     document.querySelectorAll('.input-disable ').forEach(function (element) {
+    //         element.disabled = true;
+    //     });
+
+    //     // Hide the submit , show the edit button
+    //     document.getElementById('submitBtn').style.display = 'none';
+    //     document.getElementById('editBtn').style.display = 'block';
+
+    // }
+</script>
+
+@* <script>
+    const phoneInputField = document.querySelector("#phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript:
+            "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+
+    const phoneInputField2 = document.querySelector("#phone2");
+    const phoneInput2 = window.intlTelInput(phoneInputField2, {
+        utilsScript:
+            "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+</script> *@

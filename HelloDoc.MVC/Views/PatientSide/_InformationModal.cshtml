@@ -1,0 +1,33 @@
+﻿<div class="modal fade" id="informationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content pt-4 pb-4 border rounded-4">
+            <div class="container d-flex flex-column pt-4 pb-4">
+                <div class="container d-flex justify-content-center">
+                    <i class="bi bi-info-circle-fill text-warning modal-icon display-1"></i>
+                </div>
+                <div class="container d-flex justify-content-center fs-4">
+                    Information
+                </div>
+            </div>
+            <div class="container pt-4 pb-4 text-center">
+                When Submitting a request, you must provide the correct contact inforamtion for the patient or
+                the responsibly party. Failure to provide the correct email and phone number will delay service
+                or be declined.
+            </div>
+            <div class="pb-4 pt-4 d-grid gap-2 col-3 mx-auto">
+                <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var myModal = new bootstrap.Modal(document.getElementById('informationModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+        myModal.show();
+    });
+</script>

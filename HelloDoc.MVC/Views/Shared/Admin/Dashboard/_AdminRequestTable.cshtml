@@ -1,0 +1,590 @@
+﻿@inject IHttpContextAccessor Accessor
+@using Microsoft.AspNetCore.Http
+@using HelloDoc.DAL.Models;
+@model HelloDoc.DAL.ViewModels.AdminDashvm
+
+
+@functions {
+    public string GetTableColorClass(int RequstTypeId)
+    {
+        switch (RequstTypeId)
+        {
+            case 1:  return "green";
+            case 2:  return "orange";
+            case 3:  return "blue";
+            case 4:  return "pink";
+            default: return "green";
+        }
+    }
+
+    public string GetRequestBy(int RequstTypeId)
+    {
+        switch (RequstTypeId)
+        {
+            case 1: return "Patient";
+            case 2: return "Family/Friend";
+            case 3: return "Concierge";
+            case 4: return "Business";
+            default: return "Vip";
+        }
+    }
+}
+<input asp-for="@Model.reqTypeId" id="reqTypeValueId" hidden />
+
+@if (Model.RequestListAdminDash.Count > 0)
+{
+    <div class="table-responsive d-none d-lg-block">
+        <table class="table adminTable" id="adminTable">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+
+                    @if (@Model.StatusForName != 9)
+                    {
+                        <th scope="col">Date Of Birth</th>
+                    }
+
+                    @if (@Model.StatusForName != 6 && @Model.StatusForName != 3 && @Model.StatusForName != 9)
+                    {
+                        <th scope="col">Requestor</th>
+                    }
+                    else if (@Model.StatusForName == 3)
+                    {
+                        <th scope="col">Region</th>
+                    }
+
+                    @if (@Model.StatusForName == 1)
+                    {
+                        <th scope="col">Requested date</th>
+                    }
+                    else
+                    {
+                        <th scope="col">Physican Name</th>
+                    }
+
+                    @if (@Model.StatusForName != 1)
+                    {
+                        <th scope="col">Date Of Service</th>
+                    }
+
+                    @if (@Model.StatusForName != 3)
+                    {
+                        <th scope="col">Phone</th>
+                    }
+
+                    <th scope="col">Address</th>
+
+                    @if (@Model.StatusForName != 6 && @Model.StatusForName != 9)
+                    {
+                        <th scope="col">Notes</th>
+                    }
+
+                    <th scope="col">Chat With</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model.RequestListAdminDash)
+                {
+                    <tr data-rid="@obj.RequestId" class="align-middle table-@{
+                            @GetTableColorClass(obj.RequestTypeId)}">
+                                
+                        <td scope="row">
+                            <div class="d-flex justify-content-between">
+                                @* <input type="text" asp-for="@obj.RequestId" /> *@
+                                <span>@obj.Name</span>
+                                <a href="mailto:@obj.Email">
+                                    <button class="btn btn-outline-light w-auto p-1"><i class="bi bi-envelope"></i></button>
+                                </a>
+                            </div>
+                        </td>
+
+                        @if (@Model.StatusForName != 9)
+                        {
+                            <td>
+                                @obj.DateOfBirth.ToString("MMM dd, yyyy")
+                            </td>
+                        }
+
+                        @if (@Model.StatusForName != 6 && @Model.StatusForName != 3 && @Model.StatusForName != 9)
+                        {
+                            <td>
+                                @obj.Requestor
+                            </td>
+                        }
+                        else if (@Model.StatusForName == 3)
+                        {
+                            <td>
+                                @obj.RegionName
+                            </td>
+                        }
+
+                        @if (@Model.StatusForName == 1)
+                        {
+                            <td>
+                                @obj.RequestDate.ToString("MMM dd, yyyy")  @($"{obj.totalHours}h")  @($"{obj.totalMinutes}m")   @($"{obj.totalSeconds}s")
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @obj.Physician
+                            </td>
+                        }
+
+                        @if (@Model.StatusForName != 1)
+                        {
+                            <td>
+                                DOS
+                            </td>
+                        }
+
+                        @if (@Model.StatusForName != 3)
+                        {
+                            <td>
+                                @if (obj.Phone != null)
+                                {
+                                    <a href="tel:@obj.Phone" class="text-decoration-none">
+                                        <button class="btn btn-outline-light d-none d-md-block">
+                                            <i class="bi bi-telephone-fill me-2"></i>
+                                            @obj.Phone
+                                        </button>
+                                    </a>
+                                    
+                                    @if (@obj.RequestTypeId == 1)
+                                    {
+                                        <small>(Patient)</small>
+                                    }
+                                    @if (@obj.RequestTypeId == 2)
+                                    {
+                                        <small>(Family/Friend)</small>
+                                    }
+                                    @if (@obj.RequestTypeId == 3)
+                                    {
+                                        <small>(Concierge)</small>
+                                    }
+                                    @if (@obj.RequestTypeId == 4)
+                                    {
+                                        <small>(Business Partner)</small>
+                                        
+                                    }
+                                }
+                            </td>
+                        }
+
+                        <td>
+                            @obj.Address
+                        </td>
+
+                        @if (@Model.StatusForName != 6 && @Model.StatusForName != 9)
+                        {
+
+                            <td class="notes">
+                                
+                                @obj.Notes
+                            </td>
+                        }
+
+                        <td>
+                            @if (Model.StatusForName != 1 && obj.ChatWith != null)
+                            {
+                                <button class="btn border-light text-light text-nowrap chatWithOther mb-2" data-receiver="Physician"><i class="fa fa-stethoscope"></i> Provider</button>
+                                <br>
+                            }
+                                <button class="btn border-light text-light text-nowrap chatWithOther px-3" data-receiver="Patient"><i class="bi bi-person-wheelchair"></i> Patient</button>
+                        </td>
+
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Action
+                                </button>
+
+                                <ul class="dropdown-menu">
+                                    @if (@Model.StatusForName == 1)
+                                    {
+                                        <li><a class="dropdown-item" onclick="AssignModel(@obj.RequestId,@Model.StatusForName)">Assign Case</a></li>
+                                        <li><a class="dropdown-item" onclick="CancelModal(@obj.RequestId, @Model.StatusForName)">Cancel Case</a></li>
+                                    }
+
+                                    <li><a class="dropdown-item"  onclick="ViewCaseRecords(@Model.StatusForName, @obj.RequestId,1)">View Case</a></li>
+
+                                    @if (@Model.StatusForName == 1)
+                                    {
+                                        <li><a class="dropdown-item" onclick="ViewNotes(@obj.RequestId,@Model.StatusForName)">View Notes</a></li>
+                                        <li><a class="dropdown-item" onclick="BlockModal(@obj.RequestId, @Model.StatusForName)">Block Patient</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a class="dropdown-item" onclick="ViewUploads(@obj.RequestId,@Model.StatusForName,1)">View Upload</a></li>
+                                        <li><a class="dropdown-item"  onclick="ViewNotes(@obj.RequestId,@Model.StatusForName)">View Notes</a></li>
+
+                                    }
+
+                                    @if (@Model.StatusForName == 2)
+                                    {
+                                        <li><a class="dropdown-item" onclick="TransferModel(@obj.RequestId,@Model.StatusForName)">Transfer</a></li>
+                                        <li><a class="dropdown-item" onclick="ClearModel(@obj.RequestId,@Model.StatusForName)">Clear Case</a></li>
+                                        <li><a class="dropdown-item" onclick="SendAgreementModel(@obj.RequestId,@Model.StatusForName)">Send Agreement</a></li>
+                                    }
+
+                                    @if (@Model.StatusForName != 1 && @Model.StatusForName != 2 && @Model.StatusForName != 9)
+                                    {
+                                        <li><a class="dropdown-item" onclick="SendOrder(@obj.RequestId, @Model.StatusForName)">Orders</a></li>
+                                        @* <li><a class="dropdown-item" href="#">Doctor Note</a></li> *@
+                                       
+                                    }
+                                    @if (Model.StatusForName == 4)
+                                    {
+                                        @if (obj.callType == 1 && obj.isFinalized == false)
+                                        {
+                                            <li><a class="dropdown-item" onclick="Encounter(@obj.RequestId,@Model.StatusForName)">Encounter</a></li>
+                                        }
+                                    }
+
+                                    @if(Model.StatusForName == 6)
+                                    {
+                                        @if (obj.isFinalized == false)
+                                        {
+                                            <li><a class="dropdown-item" onclick="Encounter(@obj.RequestId,@Model.StatusForName)">Encounter</a></li>
+                                        }
+                                        else if (obj.isFinalized == true)
+                                        {
+                                            <li><a class="dropdown-item" onclick="DownloadEncounter(@obj.RequestId)">Encounter</a></li>
+                                        }
+                                    }
+
+                                    @if (@Model.StatusForName == 3 || @Model.StatusForName == 7 || @Model.StatusForName == 8)
+                                    {
+                                        <li><a class="dropdown-item" onclick="CloseCase(@obj.RequestId,@Model.StatusForName)">Close Case</a></li>
+                                        <li><a class="dropdown-item" onclick="ClearModel(@obj.RequestId,@Model.StatusForName)">Clear case</a></li>
+                                    }
+                                </ul>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mx-2 border rounded shadow">
+        <div class="accordion container-fluid d-block d-lg-none p-0" id="accordionPanelsStayOpenExample">
+            <table class="adminTable w-100">
+                <thead>
+                    <tr>
+                        <th class="d-none"></th>
+                        <th class="d-none"></th>
+                    </tr>
+                </thead>
+
+                @{
+                    var counter = 1;
+                }
+
+                <tbody>
+
+                    @foreach (var obj in Model.RequestListAdminDash)
+                    {
+                        @*
+                <div class="accordion accordion-flush" id="accordionFlushExample@(counter)">
+                <div class="accordion-item">
+
+                *@
+                        <tr class="d-flex flex-column" data-rid="@obj.RequestId">
+                            <td>
+                                <h2 class="accordion-header" id="flush-heading@(counter)"></h2>
+                                <div class="accordion-button collapsed d-flex flex-column" data-bs-toggle="collapse"
+                                     data-bs-target="#flush-collapse@(counter)" aria-expanded="true"
+                                     aria-controls="flush-collapse@(counter)">
+
+                                    <div class="w-100 d-flex justify-content-between m-1">
+                                        <div class="">
+                                            <b>@obj.Name</b>
+                                        </div>
+                                        <div class="d-flex">
+                                            <small>@GetRequestBy(obj.RequestTypeId) <i class="bi bi-circle-fill @GetTableColorClass(obj.RequestTypeId)-icon"></i></small>
+                                        </div>
+                                    </div>
+                                    <div class="w-100 d-flex justify-content-between m-1 align-items-center">
+                                        <div class="text-wrap col-6">
+                                            @obj.Address
+                                        </div>
+                                        <div class="col-6 d-flex justify-content-end">
+                                            <a class="btn rounded-pill btn-outline-info" type="button" href="https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(@obj.Address).ToString()}" ;" target="_blank" style="height: 10%">
+                                                <small class="">Map Location</small>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if(Model.StatusForName == 1)
+                                    {
+                                        
+                                   
+                                        <div class="w-100 d-flex justify-content-between m-1">
+                                            <div class="">
+                                                <b>
+                                                    <i class="bi bi-clock text-info pe-1"></i>
+                                                    Wait Time: @obj.RequestDate.ToString("MMM dd, yyyy  hh:mm tt") (@($"{obj.totalHours}:{obj.totalMinutes}"))
+                                                </b>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                   
+                                <hr class="m-0 p-0 text-muted" />
+                            </td>
+
+                            <td>
+                                <div id="flush-collapse@(counter)" class="accordion-collapse collapse"
+                                     aria-labelledby="flush-heading@(counter)" data-bs-parent="#accordionFlushExample@(counter)">
+                                        <div class="d-flex justify-content-end" style="margin-top: -20px;">
+                                            <button class="btn rounded-pill border-primary text-primary z-3 mx-3" style="background-color:rgba(255, 255, 255, 0.719);" type="button" onclick="ViewCaseRecords(@Model.StatusForName, @obj.RequestId,1)">View Case</button>
+                                        </div>
+                                    <div class="accordion-body main-flex">
+
+
+                                        @if (Model.StatusForName != 9 )
+                                        {
+                                            <div class="inner-flex">
+                                                <span class="accordion-heading-inner fw-bolder ">
+                                                    <i class="bi bi-calendar-date text-info"></i>
+                                                    Date of Birth:
+                                                    <span class="accordion-value-inner">
+                                                        @obj.DateOfBirth
+                                                    </span>
+                                                </span>
+                                            </div>                                           
+                                        }
+
+                                        <div class="inner-flex">
+                                            <i class="bi bi-envelope text-info"></i>
+                                            <span class="accordion-heading-inner fw-bolder">
+                                                Email:
+                                                <span class="accordion-value-inner">
+                                                    @obj.Email
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                        @if (Model.StatusForName != 3 && Model.StatusForName != 7 && Model.StatusForName != 8)
+                                        {
+                                            <div class="inner-flex">
+                                                <i class="bi bi-telephone text-info"></i>
+                                                <span class="accordion-heading-inner fw-bolder">
+                                                    Patient:
+                                                    <span class="accordion-value-inner">
+                                                        @obj.Phone
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            
+                                        }
+
+                                        @if (Model.StatusForName == 1 || Model.StatusForName == 2 || Model.StatusForName == 4 || Model.StatusForName == 5)
+                                        {
+                                            <div class="inner-flex">
+                                                <i class="bi bi-person-circle text-info"></i>
+                                                <span class="accordion-heading-inner fw-bolder">
+                                                    Requestor:
+                                                    <span class="accordion-value-inner">
+                                                        @GetRequestBy(obj.RequestTypeId), @obj.Requestor
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        }
+
+                                        @if (Model.StatusForName != 1 && Model.StatusForName != 6 && Model.StatusForName != 9 )
+                                        {
+                                            <div class="inner-flex">
+                                                <i class="bi bi-person-circle text-info"></i>
+                                                <span class="accordion-heading-inner fw-bolder">
+                                                    TransferNotes:
+                                                    <span class="accordion-value-inner">
+                                                        @obj.Notes
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        }
+
+                                        @if (Model.StatusForName != 1)
+                                        {
+                                            <div class="inner-flex">
+                                                <i class="bi bi-person-circle text-info"></i>
+                                                <span class="accordion-heading-inner fw-bolder">
+                                                    Date of Service:
+                                                    <span class="accordion-value-inner">
+                                                        -
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div class="inner-flex">
+                                                <i class="bi bi-person-circle text-info"></i>
+                                                <span class="accordion-heading-inner fw-bolder">
+                                                    Physician: 
+                                                    <span class="accordion-value-inner">
+                                                        @obj.Physician
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        }
+                                        @if (Model.StatusForName == 3 || Model.StatusForName == 7 || Model.StatusForName == 8)
+                                        {
+                                            <div class="inner-flex">
+                                                <i class="bi bi-telephone text-info"></i>
+                                                <span class="accordion-heading-inner fw-bolder">
+                                                    Region:
+                                                    <span class="accordion-value-inner">
+                                                        @obj.RegionName
+                                                    </span>
+                                                </span>
+                                            </div>
+
+                                        }
+                                        
+                                        <div class="row gap-3 mt-4 d-flex flex-wrap justify-content-around">
+
+                                            @if (@Model.StatusForName == 2)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-warning" type="button" onclick="SendAgreementModel(@obj.RequestId,@Model.StatusForName)">Send Agreement</button>
+                                            }
+
+                                            @if (@Model.StatusForName == 1)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-info" type="button" onclick="AssignModel(@obj.RequestId,@Model.StatusForName)">Assign Case</button>
+                                                <button class="col-5 p-2 btn rounded-pill btn-danger" type="button" onclick="CancelModal(@obj.RequestId, @Model.StatusForName)">Cancel Case</button>
+                                            }
+
+                                            @if (@Model.StatusForName == 3 || @Model.StatusForName == 7 || @Model.StatusForName == 8)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-danger" type="button" onclick="CloseCase(@obj.RequestId,@Model.StatusForName)">Close case</button>
+                                            }
+
+                                            <button class="col-5 p-2 btn rounded-pill btn-success" type="button" onclick="ViewNotes(@obj.RequestId,@Model.StatusForName)">View Notes</button>
+
+                                            @if (@Model.StatusForName == 2)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-info" type="button" onclick="TransferModel(@obj.RequestId,@Model.StatusForName)">Transfer</button>
+                                            }
+
+                                            @if (@Model.StatusForName != 1)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-success" type="button" onclick="ViewUploads(@obj.RequestId,@Model.StatusForName,1)">View Uploads</button>
+                                            }
+
+                                            @if (@Model.StatusForName == 2 || @Model.StatusForName == 3 || @Model.StatusForName == 7 || @Model.StatusForName == 8)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-warning" type="button" onclick="ClearModel(@obj.RequestId,@Model.StatusForName)">Clear Case</button>
+                                            }
+
+                                           @*  @if (@Model.StatusForName != 1 && @Model.StatusForName != 2 && @Model.StatusForName != 9)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-secondary" type="button">Doctors Note</button>
+                                                <button class="col-5 p-2 btn rounded-pill btn-success" type="button" onclick="Encounter(@obj.RequestId,@Model.StatusForName)">Encounter</button>
+                                            } *@
+
+                                            @if(Model.StatusForName == 4)
+                                            {
+                                                @if (obj.callType == 1 && obj.isFinalized == false)
+                                                {
+                                                    <button class="col-5 p-2 btn rounded-pill btn-success" type="button" onclick="Encounter(@obj.RequestId,@Model.StatusForName)">Encounter</button>           
+                                                }
+
+                                            }
+                                            @if(Model.StatusForName == 6)
+                                            {
+                                                @if (obj.isFinalized == false)
+                                                {
+                                                    <button class="col-5 p-2 btn rounded-pill btn-success" type="button" onclick="Encounter(@obj.RequestId,@Model.StatusForName)">Encounter</button>
+                                                }
+                                                else if (obj.isFinalized == true)
+                                                {
+                                                    <button class="col-5 p-2 btn rounded-pill btn-success" type="button" onclick="DownloadEncounter(@obj.RequestId)">Encounter</button>
+                                                }
+                                            }
+
+                                            @if (@Model.StatusForName == 4 || @Model.StatusForName == 5 || @Model.StatusForName == 6 )
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-warning" type="button" onclick="SendOrder(@obj.RequestId, @Model.StatusForName)">Orderes</button>
+                                            }
+
+                                            @if (@Model.StatusForName == 1)
+                                            {
+                                                <button class="col-5 p-2 btn rounded-pill btn-danger" type="button" onclick="BlockModal(@obj.RequestId, @Model.StatusForName)"> Block Patient</button>
+                                            }
+                                            <a href="mailto:@obj.Email" class="col-5 p-2 btn rounded-pill btn-success">
+                                                <button class="border-0 bg-transparent text-white">Email</button>
+                                            </a>
+                                             
+                                        </div>
+
+                                        @if (@Model.StatusForName != 1 && @Model.StatusForName != 2)
+                                        {
+                                            <div class="d-flex mt-3 d-flex flex-wrap justify-content-end">
+                                                <div class="mt-2 me-2">ChatWith: </div>
+                                                @if(obj.ChatWith != null)
+                                                {
+                                                    <button class="p-2 btn fw-bolder border-info text-info chatWithOther me-2" data-receiver="Physician"><i class="fa fa-stethoscope"></i> Provider</button>
+                                                }
+                                                <button class="p-2 btn fw-bolder border-info text-info chatWithOther" data-receiver="Patient"><i class="bi bi-person-wheelchair"></i> Patient</button>
+                                            </div>
+                                        }
+
+                                        
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                        @*
+                </div>
+                </div>
+                *@
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}
+else
+{
+    <p>No Request Found</p>
+}   
+
+
+@* --------------------------------------------------------------------------------------------------------- *@
+
+<script>
+    $(document).ready(function () {
+
+        $('.adminTable').DataTable({
+            "initComplete": function (settings, json) {
+
+                $('#my-search-input').val(settings.oPreviousSearch.sSearch);
+
+                $('#my-search-input').on('keyup', function () {
+                    var searchValue = $(this).val();
+                    settings.oPreviousSearch.sSearch = searchValue;
+                    settings.oApi._fnReDraw(settings);
+                });
+            },
+            "lengthMenu": [[3, 5, 10, -1], [3, 5, 10, "All"]],
+            "pageLength": 3,
+            language: {
+                oPaginate: {
+                    sNext: '<i class="bi bi-caret-right-fill text-info"></i>',
+                    sPrevious: '<i class="bi bi-caret-left-fill text-info"></i>'
+                }
+            }
+        });
+        // $('.dataTables_length').hide();
+        $('.dataTables_filter').hide();
+    });
+</script>
+
+
+

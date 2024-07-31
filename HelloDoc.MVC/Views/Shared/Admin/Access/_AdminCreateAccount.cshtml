@@ -1,0 +1,197 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminProfilevm
+
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8 col-11">
+            <div class="d-flex  mb-3 justify-content-between">
+                <div class="mt-3">
+                    <h4>
+                        Create Admin Account
+                    </h4>
+                </div>
+
+                @if(Model.callId == 2)
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-semibold me-2" onclick="GetUserAccess(0)">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                  
+                }
+            </div>
+            <div class="shadow p-4">
+                <form method="post" id="CreateAdminAccountForm" onsubmit="CreateAdminAccountPost(@Model.callId)">
+                    <input asp-for="@Model.AspNetUserId" id="aspid" hidden />
+                    <div class="row">
+                        <div class="col-xl-12 ">
+                            <h5>Account Information</h5>
+                        </div>
+                        <div class="col-xl-4 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.UserName" class="form-control" id="floatingUserName" placeholder="User Name">
+                                <label for="floatingUserName" class="text-secondary">User Name</label>
+                                <span class="text-danger" asp-validation-for="@Model.UserName"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 mt-xl-2 mt-4">
+                            <div class="form-floating">
+                                <input type="password" asp-for="@Model.CreateAdminPassword" class="form-control" id="floatingPassword2" placeholder="Password" autocomplete="on">
+                                <label for="floatingPassword2" class="text-secondary">Password</label>
+                                <div class="eye-icon position-absolute top-0 end-0 mx-3 my-2">
+                                    <i class="bi bi-eye-slash fs-4 text-muted mt-1 common-cursor-pointer" id="togglePassword2" onclick="showPassword()"></i>
+                                </div>
+                                <span class="text-danger" asp-validation-for="@Model.CreateAdminPassword"></span>
+                            </div>
+                        </div>                       
+                        <div class="col-xl-4 mt-xl-2 mt-4 ">
+                            <div class="form-floating">
+                                <select class="form-select form-control" id="Role" asp-for="@Model.RoleId">
+                                    <option value="0" selected disabled>Select Role</option>
+                                    @foreach (var obj in Model.Roles)
+                                    {
+                                        <option value="@obj.RoleId">
+                                            @obj.Name
+                                        </option>
+                                    }
+                                </select>
+                                <label for="Role" class="ms-2 ">Role</label>
+                                <span class="text-danger" asp-validation-for="@Model.RoleId"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 mt-4">
+                            <h5>Physician Information</h5>
+                        </div>
+                        <div class="col-xl-6 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.FirstName" class="form-control " id="floatingFirstName15" placeholder="First Name">
+                                <label for="floatingFirstName15" class="text-secondary">First Name</label>
+                                <span class="text-danger" asp-validation-for="@Model.FirstName"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-xl-2 mt-4 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.LastName" class="form-control" id="floatingLastName15" placeholder="Last Name">
+                                <label for="floatingLastName15" class="text-secondary">Last Name</label>
+                                <span class="text-danger" asp-validation-for="@Model.LastName"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="email" asp-for="@Model.Email" class="form-control " id="floatingEmail15" placeholder="Email">
+                                <label for="floatingEmail15" class="text-secondary">Email</label>
+                                <span class="text-danger" asp-validation-for="@Model.Email"></span>
+                            </div>
+                        </div> 
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="email" asp-for="@Model.ConfirmEmail" class="form-control " id="floatingConfirmEmail15" placeholder="ConfirmEmail">
+                                <label for="floatingConfirmEmail15" class="text-secondary">Confirm Email</label>
+                                <span class="text-danger" asp-validation-for="@Model.ConfirmEmail"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" id="phone25" placeholder="PhoneNumber" />
+                                <label for="phone25" class="text-secondary">PhoneNumber</label>
+                                <span class="text-danger" asp-validation-for="@Model.PhoneNumber"></span>
+                            </div>
+                        </div>                       
+                        <div class="col-xl-6 mt-4">
+                            @foreach (var obj in Model.Regions)
+                            {
+                            <div class="form-check form-check-inline p-3 mx-3">
+                                <input class="form-check-input " name="adminRegions" type="checkbox" id="@obj.RegionId" value="@obj.RegionId">
+                                <label class="form-check-label" for="@obj.RegionId">@obj.Name</label>
+                            </div>
+                            }
+                        </div>                      
+                    </div>
+                                                                       
+                    <div class="row">
+                        <div class="col-12 mt-4">
+                            <h5>Mailing And Billing Information</h5>
+                        </div>
+                        <div class="col-xl-6 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.Address1" class="form-control " id="floatingAddress1" placeholder="Address1">
+                                <label for="floatingAddress1" class="text-secondary">Address1</label>
+                                <span class="text-danger" asp-validation-for="@Model.Address1"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 mt-xl-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.Address2" class="form-control " id="floatingAddress2" placeholder="Address2">
+                                <label for="floatingAddress2" class="text-secondary">Address2</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.City" class="form-control " id="floatingCity" placeholder="City">
+                                <label for="floatingCity" class="text-secondary">City</label>
+                                <span class="text-danger" asp-validation-for="@Model.City"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <select class="dclass form-select regionDropdown" id="state" asp-for="@Model.RegionId" aria-label="Region">
+                                    <option value="0" selected disabled>Select Region</option>
+                                    @foreach (var obj in Model.Regions)
+                                    {
+                                        <option value="@obj.RegionId">
+                                            @obj.Name
+                                        </option>
+                                    }
+                                </select>
+                                <label for="state" class="ms-2 ">State</label>
+                                <span class="text-danger" asp-validation-for="@Model.RegionId"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.Zipcode" class="form-control " id="floatingZip" placeholder="Zip">
+                                <label for="floatingZip" class="text-secondary">Zip</label>
+                                <span class="text-danger" asp-validation-for="@Model.Zipcode"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="tel" asp-for="@Model.AltPhone" class="form-control" id="phone26" placeholder="PhoneNumber" />
+                                <label for="phone26" class="text-secondary">PhoneNumber</label>
+                                <span class="text-danger" asp-validation-for="@Model.AltPhone"></span>
+                            </div>
+                        </div>           
+                        <div class="col-xl-12 mt-4 d-flex justify-content-end">
+                            <button type="submit" id="savebtn4" class="border-0 bg-transparent">
+                                <a class="btn  btn-success text-white fs-5  py-2 px-4 rounded fw-semibold me-2">
+                                    Create Account
+                                </a>
+                            </button>
+                        </div>
+                    </div>                                 
+                       
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
+
+<script>
+    // for password render
+    function showPassword() {
+
+        const togglePassword = document.querySelector("#togglePassword2");
+        const password = document.querySelector("#floatingPassword2");
+
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        document.getElementById("togglePassword2").classList.toggle('bi-eye');
+    }
+</script>

@@ -1,0 +1,155 @@
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,HalloDoc-DataDictionary,,,,
+,,,,,,
+,,,,,,
+,,Table Name,Admin,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,AdminId,int,,No,Its Primary Key.
+,,AspNetUserId,nvarchar,128,No,Its Foreign key of AspNetUsers Table
+,,FirstName,nvarchar,100,No,
+,,LastName,nvarchar,100,Yes,
+,,Email,nvarchar,50,No,
+,,Mobile,nvarchar,20,Yes,
+,,AddressId,int,,No,Its Primary Key.
+,,RegionId,int,,Yes,
+,,AltPhone,nvarchar,20,Yes,
+,,CreatedBy,nvarchar,128,No,Its Foreign key of AspNetUsers Table
+,,CreatedDate,datetime,,No,
+,,ModifiedBy,nvarchar,128,Yes,Its Foreign key of AspNetUsers Table
+,,ModifiedDate,datetime,,Yes,
+,,Status,tinyint,,Yes,
+,,IsDeleted,bit,,Yes,
+,,RoleId,int,,Yes,
+,,,,,,
+,,Table Name,AdminRegion,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,AdminRegionId,int,,No,Its Primary Key.
+,,AdminId,int,,No,Its Foreign key of Admin Table.
+,,RegionId,int,,No,Its Foreign key of Region Table
+,,,,,,
+,,Table Name,UserLogin,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,LoginId,int,,No,Its Primary Key.
+,,Email,nvarchar,50,No,
+,,Password,nvarchar,20,No,
+,,,,,,
+,,Table Name,Patient,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,PatientId,int,,No,Its Primary Key.
+,,FirstName,nvarchar,100,No,
+,,LastName,nvarchar,100,Yes,
+,,Email,nvarchar,50,No,
+,,Mobile,nvarchar,20,Yes,
+,,AddressId,int,,No,Its Primary Key.
+,,AltPhone,nvarchar,20,Yes,
+,,,,,,
+,,Table Name,Notes,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,NotesId,int,,No,Its Primary Key.
+,,NoteType,varchar,20,No,
+,,NotesDesc,text,,No,
+,,,,,,
+,,Table Name,Case,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,CaseId,int,,No,Its Primary Key.
+,,Date,datetime,,No,
+,,PatientId,int,,No,Its Foreign key of Patient Table.
+,,NotesId,int,,No,Its Foreign key of Notes Table.
+,,RegionId,int,,No,
+,,,,,,
+,,Table Name,Order,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,OrderId,int,,No,Its Primary Key.
+,,Profession,varchar,20,No,
+,,BusinessId,int,,No,Its Foreign key of Business Table.
+,,OrdDetails,varchar,200,No,
+,,NumOfRefill,int,,Yes,
+,,,,,,
+,,Table Name,PatientNotes,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,NotesId,int,,No,Its Primary Key.
+,,NoteType,varchar,20,No,
+,,NotesDesc,text,,No,
+,,,,,,
+,,Table Name,Provider,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,PhysicianId,int,,No,Its Primary Key.
+,,FirstName,nvarchar,100,No,
+,,LastName,nvarchar,100,Yes,
+,,Email,nvarchar,50,No,
+,,Mobile,nvarchar,20,Yes,
+,,RegionId,int,,Yes,
+,,AddressId,int,,No,Its Foreign Key of Address Table.
+,,AltPhone,nvarchar,20,Yes,
+,,Status,tinyint,,Yes,
+,,BusinessId,int,,No,Its Foreign key of Business Table.
+,,RoleId,int,,No,Its Foreign key of Role Table.
+,,MedicalLicense,nvarchar,20,Yes,
+,,NpiNumber,int,,No,
+,,,,,,
+,,Table Name,Role,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,RoleId,int,,No,Its Primary Key.
+,,RoleType,nvarchar,20,No,
+,,RoleDesc,nvarchar,200,No,
+,,,,,,
+,,Table Name,Address,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,AddressId,int,,No,Its Primary Key.
+,,Address1,nvarchar,500,No,
+,,Address2,nvarchar,500,Yes,
+,,City,nvarchar,100,No,
+,,Zip,nvarchar,10,No,
+,,,,,,
+,,Table Name,Region,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,RegionId,int,,No,Its Primary Key.
+,,State,nvarchar,20,No,
+,,,,,,
+,,Table Name,Business,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,BusinessId,int,,No,Its Primary Key.
+,,BusinessWebsite,nvarchar,50,Yes,
+,,BusinessName,nvarchar,20,No,
+,,AddressId,int,,Yes,Its Foreign Key of Address Table.
+,,Email,nvarchar,50,No,
+,,Phone,nvarchar,20,Yes,
+,,,,,,
+,,Table Name,Shift,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,ShiftId,int,,No,Its Primary Key.
+,,RegionId,int,,No,Its Foreign Key of Region Table.
+,,StartDate,datetime,,No,
+,,PatientId,int,,No,Its Foreign key of Patient Table.
+,,EndDate,datetime,,No,
+,,PhysicianId,int,,No,Its Foreign Key of Provider Table.
+,,RepeatDay,int,,Yes,
+,,RepeatEnd,datetime,,Yes,
+,,,,,,
+,,Table Name,PatientRequest,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,RequestId,int,,No,Its Primary Key.
+,,RequestType,nvarchar,20,No,
+,,FirstName,nvarchar,20,Yes,
+,,LastName,nvarchar,20,Yes,
+,,Email,nvarchar,21,No,
+,,Phone,nvarchar,22,Yes,
+,,Relation,nvarchar,23,Yes,
+,,BusinessId,nvarchar,24,Yes,Its Foreign key of Business Table.
+,,HotelName,nvarchar,25,Yes,
+,,Address1,nvarchar,500,Yes,
+,,Address2,nvarchar,500,Yes,
+,,City,nvarchar,100,Yes,
+,,Zip,nvarchar,10,Yes,
+,,,,,,
+,,Table Name,PatientLogin,,,
+,,Field Name,DataType,Length,Nullable,Comments
+,,LoginId,int,,No,Its Primary Key.
+,,Email,nvarchar,50,No,
+,,Password,nvarchar,20,No,
+,,RequestId,int,,No,Its Foreign Key of PatientRequest Table.

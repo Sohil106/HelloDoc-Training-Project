@@ -1,0 +1,26 @@
+﻿
+<div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="chatWith" aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header bg-info">
+        <div class="d-flex align-items-center gap-2">
+        @* <div>
+           <img src="~/content/1/Profile.png" class="border rounded-5 bg-light" width="50" />
+        </div> *@
+        <h5 class="offcanvas-title text-light" id="receiverName">Admin</h5>
+        </div>
+        <input type="hidden" id="receiverId" />
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column justify-content-end">
+        <div class="overflow-y-auto" id="message-body">
+        </div>
+        @*<div class="d-flex w-100 flex-column gap-1 text-end message-div">
+            <div><span class="bg-success-subtle rounded p-2 fs-5">hello</span></div><span class="message-sent-time">08:58 AM</span>
+        </div>
+        <div class="d-flex w-100 flex-column gap-1 text-start message-div">
+            <div><span class="bg-success-subtle rounded p-2 fs-5">hello</span></div><span class="message-sent-time">08:58 AM</span>
+        </div>*@
+    </div>
+    <div class="offcanvas-footer px-3 pb-4 d-flex gap-3">
+        <input type="text" class="form-control" id="typedMessage" placeholder="Type a message"><button class="btn btn-info text-light" id="sendButton"><i class="bi bi-send"></i></button>
+    </div>
+</div>

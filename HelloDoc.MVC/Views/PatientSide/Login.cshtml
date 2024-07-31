@@ -1,0 +1,153 @@
+﻿@model HelloDoc.DAL.Models.AspNetUser;
+@* @{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apw </a>.</p>
+</div>
+ *@
+
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dotnetindex</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @*************** toastr cdn ************@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="~/js/custom.js" asp-append-version="true">
+
+
+</head>
+<body onload="checkMode()">
+    <partial name="_Notification" />
+
+
+    <button class="bg-transparent btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2 position-absolute modelogin"
+            id="dark-mode-btn">
+        <i id="moon" class="bi bi-moon"></i>
+        <i id="sun" class="bi bi-sun d-none"></i>
+    </button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6 d-xl-block d-none">
+                <img src="~/images/11116016_415.jpg" alt="images" class="img-responsive w-100 h-100">
+            </div>
+            <div class="col-xl-6">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="row mainbox">
+                            <div class="col-12 d-flex align-items-center justify-content-center">
+                                <img src="~/images/MainLogo.png" class="d-md-block d-none" alt="" style="height: 14vh;">
+                            </div>
+                            <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+
+                                <form class="col-xl-7 col-11" asp-action="Login" method="post">
+                                    <div>
+                                        <a asp-action="LandingPage" asp-controller="PatientSide" class="alllinks text-decoration-none"> <i class="bi bi-caret-left"></i> Back </a>
+                                    </div>
+
+                                    <h3 class="my-2 mb-5">Login To your account</h3>
+
+                                    <p class="text-danger">@ViewBag.Message</p>
+
+                                    <div class="form-group">
+                                        <div class="form-floating mb-3 position-relative">
+                                            <input type="email" asp-for="Email" class="form-control input-fields" id="floatingInput" placeholder="name@example.com">
+                                            <label for="floatingInput">Email</label>
+                                            @* <span asp-validation-for="Email" class="text-danger"></span> *@
+                                            <div class=" position-absolute top-0 end-0 mx-3 my-3">
+                                                <i class="bi bi-person-circle"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <div class="form-floating">
+                                            <input type="password" asp-for="PasswordHash" class="form-control input-fields" id="floatingPassword2" placeholder="Password">
+                                            <label for="floatingPassword2" class="xyz">Password</label>
+                                            <div class="eye-icon position-absolute end-0 top-0 mx-3 my-2">
+                                                <i class="bi bi-eye-slash fs-4 text-muted mt-1 common-cursor-pointer" id="togglePassword2" onclick="showPassword()"></i>
+                                            </div>
+                                            @* <span asp-validation-for="PasswordHash" class="text-danger"></span> *@
+                                        </div>
+
+
+
+                                    </div>
+                                    <button type="submit" class="btn btn-info userbuttons text-light">Login</button>
+
+                                    <div class="text-center mt-4">@Html.ActionLink("Forgot password", "Forgot", "PatientSide", null, new { @class = "alllinks text-decoration-none" })</div>
+
+                                </form>
+                            </div>
+                            <div class="col-12 d-flex flex-column  justify-content-end mb-1">
+                                <footer class="text-center text-lg-start">
+                                    <!-- Copyright -->
+                                    <div class="text-center p-3">
+                                        Terms of Conditions |
+                                        <a class="text-body text-decoration-none" href="https://mdbootstrap.com/">Privacy Policy</a>
+                                    </div>
+                                    <!-- Copyright -->
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/js/dark-theme.js" asp-append-version="true"></script>
+
+<script>
+    function showPassword() {
+
+        const togglePassword = document.querySelector("#togglePassword2");
+        const password = document.querySelector("#floatingPassword2");
+
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        document.getElementById("togglePassword2").classList.toggle('bi-eye');
+        // this.classList.toggle('bi-eye-slash');
+    }
+</script>
+<script>
+    $("form").validate({
+        errorClass: "text-danger",
+        errorElement: "span",
+        rules: {
+            // Define validation rules here
+            Email: {
+                required: true
+            },
+            PasswordHash: {
+                required: true
+            }
+
+        },
+        messages: {
+            Email: {
+                required: "Please enter your Email"
+            },
+            PasswordHash: {
+                required: "Please enter your Password",
+            }
+        }
+    });
+</script>

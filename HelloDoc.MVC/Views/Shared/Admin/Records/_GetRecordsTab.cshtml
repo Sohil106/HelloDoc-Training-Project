@@ -1,0 +1,218 @@
+﻿@model HelloDoc.DAL.ViewModels.Records.GetRecordsvm
+<div class="w-100 px-2 px-sm-5 ">
+
+    <h3 class="ms-2 my-1">Patient History</h3>
+
+    <div class="shadow rounded-2 bg-transparent  my-2 p-3">
+        <form method="post" id="patientRecordsform" onsubmit="patientRecordsFilter()">
+            <div class="row g-2 my-2 p-3">
+
+                <div class="form-floating mb-3 col-sm-6 col-md-3 col-lg-3 col-xl-3 d-flex">
+                    <input asp-for=@Model.searchRecordOne type="search" class="form-control bg-transparent" id="first_name" placeholder="First Name">
+                    <label for="first_name" class="ms-2 text-muted">First Name</label>
+                </div>
+
+                <div class="form-floating mb-3 col-sm-6 col-md-3 col-lg-3 col-xl-3 d-flex">
+                    <input asp-for=@Model.searchRecordTwo type="search" class="form-control bg-transparent" id="last_name" placeholder="Last Name">
+                    <label for="last_name" class="ms-2 text-muted">Last Name</label>
+                </div>
+
+                <div class="form-floating mb-3 col-sm-6 col-md-3 col-lg-3 col-xl-3 d-flex">
+                    <input asp-for=@Model.searchRecordThree type="search" class="form-control " id="email" placeholder="Email" aria-label="Email">
+                    <label class="ms-2 text-muted" for="Email">Email</label>
+                </div>
+
+                <div class="form-floating mb-3 col-sm-6 col-md-3 col-lg-3 col-xl-3 d-flex">
+                    <input asp-for =@Model.searchRecordFour type="search" class="phone form-control" id="phone" placeholder="Phone" aria-label="Phone">
+                    <label for="phone" class="ms-2 text-muted">Phone Number</label>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="reset" value="reset" class="btn btn-outline-info me-2 px-3 py-2" id="clear_button">Clear</button>
+                    <button type="submit" value="submit" class="btn btn-info text-white ms-1 px-3 py-2" id="search_button">Search</button>
+                </div>
+
+            </div>
+        </form>
+
+        @if (Model.users.Count > 0)
+        {               
+            <div class="table-responsive d-none d-lg-block">
+                <table class="table recordTable" id="search_table">
+                    <thead class="table-active p-2">
+                        <tr>
+                            <th scope="col" class="text-center">First Name</th>
+                            <th scope="col" class="text-center">Last Name</th>
+                            <th scope="col" class="text-center">Email</th>
+                            <th scope="col" class="text-center">Phone</th>
+                            <th scope="col" class="text-center">Address</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var obj in Model.users)
+                        {
+                            <tr>
+                                <td class="text-center">@obj.FirstName</td>
+                                <td class="text-center">@obj.LastName</td>
+                                <td class="text-center">@obj.Email</td>
+                                <td class="text-center">@obj.Mobile</td>
+                                @{
+                                    var address=@obj.Street + " " + @obj.City + " " + @obj.State + " " + @obj.ZipCode;
+                            }
+                                <td class="text-center">@address</td>
+                                <td>
+                                    <button style="cursor : pointer" class="btn btn-outline-info rounded-2" aria-expanded="false"  onclick="GetPatientRecordExplore(@obj.UserId)" >
+                                        Explore
+                                    </button>
+                                </td>
+                            </tr>
+                        } 
+                    </tbody>
+                </table>
+            </div>
+            <div class="border rounded shadow d-block d-lg-none">
+                <div class="accordion container-fluid p-0" id="accordionPanelsStayOpenExample">
+                    <table class="w-100 recordTable">
+                        <thead>
+                            <tr>
+                                <th class="d-none"></th>
+                                <th class="d-none"></th>
+                            </tr>
+                        </thead>
+                        @{
+                            var counter = 1;
+                        }
+                        <tbody>
+                            @if (Model.users != null)
+                            {
+                                @foreach (var obj in Model.users)
+                                {
+                                    <tr class="d-flex flex-column">
+                                        <td>
+                                            <h2 class="accordion-header" id="flush-heading@(counter)"></h2>
+
+                                            <div class="accordion-button collapsed d-flex flex-column pb-0" data-bs-toggle="collapse" data-bs-target="#flush-collapse@(counter)" aria-expanded="false" aria-controls="flush-collapse@(counter)">
+
+                                                <div class="w-100 ">
+                                                    <span class="fw-bolder">
+                                                        @{
+                                                            var Name = @obj.FirstName + " " + @obj.LastName;
+                                                        }
+                                                        @Name
+                                                    </span>
+                                                </div>
+                                                <div class="w-100 mt-2">
+                                                    <div class="">
+                                                        @obj.Mobile
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div id="flush-collapse@(counter)" class="accordion-collapse collapse" aria-labelledby="flush-heading@(counter)" data-bs-parent="#accordionFlushExample">
+                                                <div class="accordion-body main-flex pt-2">
+                                                    <div class="w-100">
+                                                        @{
+                                                            var address = @obj.Street + " " + @obj.City + " " + @obj.State + " " + @obj.ZipCode;
+                                                        }
+                                                        <div class="">
+                                                            <span class="fw-bolder">Email: </span> @obj.Email
+                                                        </div>
+                                                        <div class="">
+                                                            <span class="fw-bolder">Phone: </span> @obj.Mobile
+                                                        </div>
+                                                        <div class="">
+                                                            <span class="fw-bolder">Address: </span> @address
+                                                        </div>
+                                                   
+                                                    <div class="inner-flex d-flex justify-content-end">
+
+                                                            <button style="cursor : pointer" class="btn btn-outline-info rounded-2" aria-expanded="false" onclick="GetPatientRecordExplore(@obj.UserId)">
+                                                                Explore
+                                                            </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    counter++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+        <p class="ps-3 pb-4">No Request Found</p>
+        }
+    </div>
+</div>
+<script>
+   @*  $(document).ready(function () {
+        $('#search_button').on('click', function () {
+            var firstName = $('#first_name').val().toLowerCase();
+            var lastName = $('#last_name').val().toLowerCase();
+            var email = $('#email').val().toLowerCase();
+            var phone = $('#phone').val().toLowerCase();
+
+            $('#search_table tbody tr').hide().filter(function () {
+                var firstMatch = $(this).find('td:nth-child(1)').text().toLowerCase().includes(firstName) || firstName === '';
+                var lastMatch = $(this).find('td:nth-child(2)').text().toLowerCase().includes(lastName) || lastName === '';
+                var emailMatch = $(this).find('td:nth-child(3)').text().toLowerCase().includes(email) || email === '';
+                var phoneMatch = $(this).find('td:nth-child(4)').text().toLowerCase().includes(phone) || phone === '';
+
+                return firstMatch && lastMatch && emailMatch && phoneMatch;
+            }).show();
+        });
+
+        $('#clear_button').on('click', function () {
+            $('#first_name').val('');
+            $('#last_name').val('');
+            $('#email').val('');
+            $('#phone').val('');
+
+            $('#search_button').click();
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('#clear_button').on('click', function () {
+            $('#first_name').val('');
+            $('#last_name').val('');
+            $('#email').val('');
+            $('#phone').val('');
+
+            $('#search_button').click();
+        });
+    }); *@
+
+
+</script>
+
+ <script>
+    $(document).ready(function () {
+        // $('.recordTable').DataTable.destroy();   
+        $('.recordTable').DataTable({
+            //"lengthMenu": [[5, 10, -1], [5, 10, "All"]],
+            "pageLength": 5,
+
+            language: {
+                oPaginate: {
+                    sNext: '<i class="bi bi-caret-right-fill text-info"></i>',
+                    sPrevious: '<i class="bi bi-caret-left-fill text-info"></i>'
+
+                }
+            }
+        });
+        $('.dataTables_length').hide();
+        $('.dataTables_filter').hide();
+
+    });
+</script>

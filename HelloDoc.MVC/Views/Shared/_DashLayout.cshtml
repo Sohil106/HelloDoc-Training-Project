@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+@model Data_Access.Dash.PatientDashData
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashlayout</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    @*************** fontawsome icon cdn ************@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    @*************** toastr cdn ************@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/custom.js"></script>
+
+
+
+</head>
+
+<body onload="checkMode()">
+    <partial name="_Notification" />
+
+    <header class="bg-transparent">
+        <div class="d-flex justify-content-between align-items-center shadow">
+            <div class="ms-3 d-flex align-items-center">
+
+                <div class="ms-3 d-md-none d-block">
+                    <i class="btn bi bi-list toggle-menu new-req-btn" type="button" data-bs-toggle="offcanvas"
+                       data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"></i>
+
+                    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
+                         aria-labelledby="offcanvasWithBothOptionsLabel">
+                        <div class="offcanvas-header d-flex justify-content-end">
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div class="menu-bar text-center">
+                                <div class="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item mx-2">
+                                            <a class="nav-link nitem @(ViewContext.RouteData.Values["action"].ToString() == "Dashboard" ? "active" : "")" aria-current="page" asp-action="Dashboard" asp-controller="PatientSide">Dashboard</a>
+                                        </li>
+                                        </li>
+                                        <li class="nav-item mx-3">
+                                            <a class="nav-link nitem @(ViewContext.RouteData.Values["action"].ToString() == "Profile" ? "active" : "")" asp-action="Profile" asp-controller="PatientSide">Profile</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a asp-controller="PatientSide" asp-action="Dashboard">
+                        <img src="~/images/MainLogo.png" alt="" style="height: 7vh;">
+                    </a>
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="d-flex justify-content-end align-items-center">
+                <div class="d-md-block d-none" style="margin-right:6%;margin-top: 6%;">
+                    <pre>Welcome <strong>@Accessor.HttpContext.Session.GetString("_sessionUserName")</strong></pre>
+                </div>
+                <div class="xyz mx-3" style="margin-right: 6%;">
+                    <a asp-action="Logout" class="moonbut btn" style="color: #00bce7;  border:2px solid #00bce7; border-radius: 5px;">
+                        <span class="d-md-block d-none text-capitalize">Logout</span>
+                        <i class="bi bi-box-arrow-right d-md-none d-block"></i>
+                    </a>
+                </div>
+                <div class="xyz" style="margin-right: 8%;"> 
+                    <button class="moonbut bg-transparent" id="dark-mode-btn"
+                            style="background-color: white;  border:2px solid #00bce7; color: #00bce7; border-radius: 5px;height: 40px; width: 40px;">
+                        <i id="moon" class="bi bi-moon"></i>
+                        <i id="sun" class="bi bi-sun d-none"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class=" d-md-flex d-none justify-content-start mx-4 my-2">
+            <ul class="nav nav-underline">
+                <li class="nav-item mx-2">
+                    <a class="nav-link nitem @(ViewContext.RouteData.Values["action"].ToString() == "Dashboard" ? "active" : "")" aria-current="page" asp-action="Dashboard" asp-controller="PatientSide">Dashboard</a>
+                </li>
+                <li class="nav-item mx-3">
+                    <a class="nav-link nitem @(ViewContext.RouteData.Values["action"].ToString() == "Profile" ? "active" : "")" asp-action="Profile" asp-controller="PatientSide">Profile</a>
+                </li>
+            </ul>
+        </div>
+
+    </header>
+
+    <div>
+
+        @RenderBody()
+    </div>
+
+
+    <footer class="bg-dark fixed-bottom d-flex justify-content-end py-2 px-3">
+        <span class="text-light">
+            Terms of
+            Conditions | Privacy policy
+        </span>
+    </footer>
+
+    <script src="~/js/dark-theme.js" asp-append-version="true"></script>
+
+    @await Html.PartialAsync("~/Views/Shared/_ChatWith.cshtml")
+</body>
+
+</html>
+

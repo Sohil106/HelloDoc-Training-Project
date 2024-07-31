@@ -1,0 +1,137 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminDashvm;
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<partial name="Admin/_AdminHeaderSecond"/>
+
+<!-- main-container -->
+<div class="p-sm-2 p-md-5 mt-4 mt-sm-0">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+             tabindex="0">
+            <partial name="Admin/Dashboard/_AdminDashboard" />
+        </div>
+
+        <div class="tab-pane fade" id="provider-location-tab-pane" role="tabpanel"
+             aria-labelledby="provider-location-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Provider Location</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+            @* <h3 class="mb-3 p-3 p-md-2 ">My Profile</h3> *@
+        </div>
+
+        @* ***************************************************providers***************************************************** *@
+
+        <div class="tab-pane fade" id="Provider-tab-pane" role="tabpanel" aria-labelledby="Providers-tab"
+             tabindex="0">
+            @* <h3 class="mb-3 p-3 p-md-2 ">Providers</h3> *@
+        </div>
+
+        <div class="tab-pane fade" id="Scheduling-tab-pane" role="tabpanel" aria-labelledby="Scheduling-tab"
+             tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Scheduling</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="Invoicing-tab-pane" role="tabpanel" aria-labelledby="Invoicing-tab"
+             tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Invoicing</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="Partners-tab-pane" role="tabpanel" aria-labelledby="Partners-tab"
+             tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Partners</h3>
+            </div>
+        </div>
+
+        @* ***************************************************Access***************************************************** *@
+
+       @*  <div class="tab-pane fade" id="Access-tab-pane" role="tabpanel" aria-labelledby="Access-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Access</h3>
+            </div>
+        </div> *@
+
+        <div class="tab-pane fade" id="Account-tab-pane" role="tabpanel" aria-labelledby="Account-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Account Access</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="User-tab-pane" role="tabpanel" aria-labelledby="User-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">User Access</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="Admin-tab-pane" role="tabpanel" aria-labelledby="Admin-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Create Admin</h3>
+            </div>
+        </div>
+        @* ***************************************************Records***************************************************** *@
+
+
+       @*  <div class="tab-pane fade" id="Records-tab-pane" role="tabpanel" aria-labelledby="Records-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Records</h3>
+            </div>
+        </div> *@
+
+        <div class="tab-pane fade" id="Search-tab-pane" role="tabpanel" aria-labelledby="Search-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Search Records</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="Email-tab-pane" role="tabpanel" aria-labelledby="Email-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 "> Email Logs</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="SMS-tab-pane" role="tabpanel" aria-labelledby="SMS-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 "> SMS Logs</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="Patient-tab-pane" role="tabpanel" aria-labelledby="Patient-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Patient History</h3>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="Block-tab-pane" role="tabpanel" aria-labelledby="Block-tab" tabindex="0">
+            <div class="container-fluid">
+                <h3 class="mb-3 p-3 p-md-2 ">Block History</h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+@* ---for rendering cancecase model-- *@
+<div id="showCaseModal">
+
+</div>
+<div id="loader-container" class="loader-container" style="z-index:150">
+    <div id="loader" class="loader" style="z-index:150"></div>
+</div>
+
+<div class="backdrop" style="z-index:140"></div>
+
+@await Html.PartialAsync("~/Views/Shared/_ChatWith.cshtml")
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
+    <script src="~/js/chahub.js"></script>
+}

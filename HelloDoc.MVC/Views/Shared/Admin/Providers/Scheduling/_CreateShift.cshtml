@@ -1,0 +1,223 @@
+﻿@model HelloDoc.DAL.ViewModels.Schedulingvm;
+
+<div class="modal fade" id="createShiftModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add New Shift </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" class="row p-3" id="createShiftForm" onsubmit="createShiftPost()">
+                @*<input type="hidden" asp-for="Shiftid" />*@
+
+                <div class="form-floating my-3">
+                    <select asp-for="@Model.ScheduleModel.Regionid" class="p-2 px-2 form-select w-100 " id="selectregion" onchange="FilterAssignModel(this.value)">
+                        <option value="" selected disabled>Regions</option>
+                        @foreach (var region in Model.regions)
+                        {
+                            <option value="@region.RegionId">@region.Name - (@region.Abbreviation)</option>
+                        }
+                    </select>
+                    <span class="text-danger" asp-validation-for="@Model.ScheduleModel.Regionid"></span>
+                </div>
+
+                @if (Model.callId == 3)
+                {
+                    <input type="text" asp-for="@Model.ScheduleModel.Physicianid" value="@Model.physicianId" hidden />
+                }
+                else
+                {
+                <div class="form-floating mb-3">
+                    <select class="form-select p-2" asp-for="@Model.ScheduleModel.Physicianid" id="physicianId" aria-label="Default select example">
+                        <option value="" selected disabled>Physician</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="@Model.ScheduleModel.Physicianid"></span>
+                </div>
+                    
+                }
+
+
+                <div class="col-md-12 form-floating mb-3">
+                    <input id="StartDate" asp-for="@Model.ScheduleModel.Startdate" class="form-control rounded vcs" type="date" placeholder=Suchtext autocomplete=off>
+                    <label class="ms-2" for="floatingInput">Starting Date</label>
+                    <span class="text-danger" asp-validation-for="@Model.ScheduleModel.Startdate"></span>
+                </div>
+                <div class="col-md-6 form-floating mb-3">
+                    <input id="StartTime" asp-for="@Model.ScheduleModel.Starttime" class="form-control rounded vcs" type="time" placeholder=Suchtext autocomplete=off>
+                    <label class="ms-2" for="floatingInput">Start</label>
+                    <span class="text-danger" asp-validation-for="@Model.ScheduleModel.Starttime"></span>
+                </div>
+                <div class="col-md-6 form-floating mb-3">
+                    <input id="EndTime" asp-for="@Model.ScheduleModel.Endtime" class="form-control rounded vcs" type="time" placeholder=Suchtext autocomplete=off>
+                    <label class="ms-2" for="floatingInput">End</label>
+                    <span class="text-danger" asp-validation-for="@Model.ScheduleModel.Endtime"></span>
+                </div>
+
+
+                <div class="form-check form-switch col-md-6 d-flex align-items-center justify-content-start mb-3 mx-3">
+                    <input class="form-check-input" asp-for="@Model.ScheduleModel.Isrepeat" id="Isrepeat" type="checkbox" role="switch" onchange="toggleCheckboxes()">
+                    <label class="form-check-label mx-2" for="Isrepeat">Repet</label>
+                </div>
+
+                <label class="my-2" for="Sunday">Repeat Days</label>
+                <input type="hidden" asp-for="@Model.ScheduleModel.checkWeekday" id="checkWeekday" />
+
+                <div class="col-md-12 row form-floating">
+
+                    <div class="col-md-4">
+                        <div class="form-check mx-2 d-flex align-items-center">
+                            <input onchange="menubox()" class="form-check-input Every disabled" disabled type="checkbox" name="Sunday" value="0">
+                            <label class="form-check-label ms-2" for="Sunday">Every Sunday</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 ">
+                        <div class="form-check mx-2 d-flex align-items-center">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Monday" value="1">
+                            <label class="form-check-label ms-2" for="Monday">Every Monday</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <div class="form-check mx-2 d-flex align-items-center">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Tuesday" value="2">
+                            <label class="form-check-label ms-2" for="Tuesday">Every Tuesday</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mx-2 d-flex align-items-center">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Wednesday" value="3">
+                            <label class="form-check-label ms-2" for="Wednesday">Every Wednesday</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mx-2 d-flex align-items-center">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Thursday" value="4">
+                            <label class="form-check-label ms-2" for="Thursday">Every Thursday</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mx-2 d-flex align-items-center">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Friday" value="5">
+                            <label class="form-check-label ms-2" for="Friday">Every Friday</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 ">
+                        <div class="form-check mx-2 d-flex align-items-center">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Saturday" value="6">
+                            <label class="form-check-label ms-2" for="Saturday">Every Saturday</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-12 form-floating  my-2">
+                    <select asp-for="@Model.ScheduleModel.Repeatupto" class="form-select form-select-sm mt-3 p-2" id="Refile" disabled data-allow-clear="true" tabindex="-1" data-control="select2" data-placeholder=" ">
+                        <option selected hidden>Reapet End</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                    </select>
+                </div>
+
+                <input type="hidden" id="checkWeekday" />
+
+
+                <div class="col-12 d-flex justify-content-end mt-3 mb-2">
+                    <input type="submit" value="Save" class="btn btn-info text-white mx-2" />
+                    <button type="button" class="btn btn-outline-info hover_white m-0" data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+
+    var today = new Date();
+    var formattedDate = today.toISOString().split('T')[0];
+
+    document.getElementById('StartDate').min = formattedDate;
+
+    console.log(document.getElementById('StartDate').min);
+
+
+    document.getElementById("StartDate").addEventListener("change", function () {
+        console.log(document.getElementById('StartDate').value);
+        if (document.getElementById('StartDate').value == formattedDate) {
+
+            const currentHours = today.getHours().toString().padStart(2, "0");
+            const currentMinutes = today.getMinutes().toString().padStart(2, "0");
+            const currentTime = `${currentHours}:${currentMinutes}`;
+
+            document.getElementById('StartTime').min = currentTime;
+        }
+        else {
+            document.getElementById('StartTime').min = '00:00';
+        }
+    });
+
+
+
+    document.getElementById('StartTime').addEventListener('change', function () {
+        var startTimeValue = this.value.split(':');
+        var startTime = new Date();
+        startTime.setHours(startTimeValue[0], startTimeValue[1], 0);
+        startTime.setHours(startTime.getHours() + 1); // Set the start time to 1 hour later
+        document.getElementById('EndTime').min = startTime.toTimeString().slice(0, 5);
+
+        if (document.getElementById('EndTime').value < this.value) {
+            document.getElementById('EndTime').value = this.value;
+        }
+    });
+
+    var startTimeInput = document.getElementById('StartTime');
+    var endTimeInput = document.getElementById('EndTime');
+
+    startTimeInput.addEventListener('input', function () {
+        var startTimeValue = this.value.split(':');
+        var startTime = new Date();
+        startTime.setHours(startTimeValue[0], startTimeValue[1], 0);
+        startTime.setHours(startTime.getHours() + 1); // Set the start time to 1 hour later
+        endTimeInput.min = startTime.toTimeString().slice(0, 5);
+
+        if (endTimeInput.value < this.value) {
+            endTimeInput.value = this.value;
+        }
+    });
+
+    window.onload = toggleCheckboxes;
+    function toggleCheckboxes() {
+        var repeatCheckbox = document.getElementById('Isrepeat');
+        var refile = document.getElementById('Refile');
+        var checkboxes = document.querySelectorAll('.Every');
+
+        if (!repeatCheckbox.checked) {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+                checkbox.disabled = true;
+                refile.disabled = true;
+            });
+        } else {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.disabled = false;
+                refile.disabled = false;
+            });
+        }
+    }
+
+    function menubox() {
+        event.preventDefault();
+        let checkboxes = document.querySelectorAll('.Every:checked');
+        let repeatDays = [];
+        checkboxes.forEach((checkbox) => {
+            repeatDays.push(checkbox.value);
+        });
+        document.querySelector('#checkWeekday').value = repeatDays.join(',');
+        console.log(document.querySelector('#checkWeekday').value);
+    };
+
+
+
+</script>

@@ -1,0 +1,264 @@
+/* @media (min-width: 0px) and (max-width: 575px){
+    .mainbox{
+        height: 550px;
+    }
+}
+
+@media (min-width: 576x) and (max-width: 767px){
+    .mainbox{
+        height: 550px;
+    }
+}
+@media (min-width: 767px) and (max-width: 992px){
+    .mainbox{
+        height: 550px;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199px){
+    .mainbox{
+    height: 550px;
+    }
+}
+@media (min-width: 1200px) and (max-width: 1399px){
+    .mainbox{
+        height: 700px;
+    }
+}
+@media (min-width: 1399px){
+    .mainbox{
+        height: 955px;
+    }
+} */
+.create-request-active {
+    background-color: #00bce7;
+    color:white;
+}
+
+
+@media (max-width: 600px) {
+    .logoimg{
+        opacity: 0;
+    }
+    .ipbtns{
+        width: 80vw !important;
+    }
+}
+
+@media (max-width: 768px) {
+
+    body {
+        background-size: 100% 100% !important;
+    }
+}
+
+.userbuttons {
+    width: 100%;
+    height: 58px;
+    background-color: #00bce7
+}
+
+
+.dark-mode {
+    background-color: black !important;
+    color: white !important;
+}
+
+.formcontrol :hover{
+    border-color: black !important;
+    box-shadow: black !important;
+}
+
+.alllinks{
+    color:  #00bce7 !important;
+}
+
+.bodyback{
+    background-color: rgba(168, 164, 164, 0.384) !important;
+
+}
+
+/* .ind-for-body {
+ background-image: url("/images/11116016_415.jpg");
+ background-size: 100% 100%;
+ background-repeat: no-repeat;
+ background-position: center;
+ backdrop-filter: blur(10px);
+} */
+.mainbox{
+    height: 100vh;
+    /*background: transparent;*/
+/*    
+    background-image: url(/images/background.png);
+    background-repeat: no-repeat; 
+    background-position: center; */
+    
+} 
+
+
+.mode{
+    top: 2%;
+    right: 2% !important;
+    border: 1px solid #00bce7;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    border-radius: 5px;
+    color: #00bce7;
+    background-color: transparent;
+}
+.modelogin{
+    right: 0.5%;
+    top: 1.5%;
+}
+.logo-div{
+    height: 200px;
+    width: 100px;
+    overflow: hidden;
+    object-position: 20% 50%;
+}
+.logoimg{
+    margin: -100px -100px -100px -150px;
+}
+
+/* .xyz :{
+    background-color: transparent !important;
+}  */
+
+.input-fields{
+    background: transparent !important;
+}
+
+.input-fields {
+        border: 1px solid rgb(149, 148, 148) !important;
+}
+
+
+.input-fields:focus {
+    border-color: #00bce7 !important;;
+}
+
+.input-boxes{
+    position: relative !important;
+}
+
+.input-boxes > .icons{
+    position: absolute;top: 25%;right: 2%;
+}
+
+
+
+/* patient-request page */
+
+
+@media (max-width : 780px ){
+    .heading{
+        position: relative;
+    }
+    .backbo{
+        right: 0 !important;
+    }
+}
+
+.reqbut{
+    width: 100%;
+    height: 80px;
+    text-align: left !important;
+    font-weight: bold !important;
+    display: flex !important;
+    align-items: center  !important;
+}
+
+
+
+/* patient-requestform */
+
+.allins:hover{
+    border: 1px solid #8db8f8 !important;
+}
+
+.tel-container{
+    height: 58px;
+    display: flex;
+    align-items: center;
+    }
+    
+.tel-container:hover{
+    border: 1px solid #8db8f8 !important;
+    box-shadow: 0px 0px 0px 4px #0d6efd40;
+    }
+    
+.tel-input:focus{
+    box-shadow: none;
+    }
+
+.sec-row-col{
+    /* overflow-x: scroll; */
+    /* height: 74.5vh;  */
+    border-radius: 1%;
+}
+
+/* .sec-row-col::-webkit-scrollbar {
+    display: none;
+} */
+
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* @media(min-width : 1200px)  {
+    .foot {
+        position:absolute;
+        bottom: 0px !important;
+    }
+    
+} */
+
+/* hello */ 
+
+
+label {
+    z-index: 0 !important;
+}
+
+
+.iti--allow-dropdown{
+    height: 100%; 
+}
+/* *********************************************************************************************************************************************************************************** */
+/*.mainbg {
+    background-color: #f2f2f2c4 ;
+}*/
+
+ .nitem {
+    color: black !important; /* set default link color to black */
+  }
+  
+ .nitem:hover {
+    color: #00bce7 !important; /* set link hover color to blue */
+  }
+  
+ .nitem.active {
+    color: #00bce7 !important; /* set active link color to blue */
+  }
+
+ .new-req-btn{
+    color: #00bce7 !important;
+    border:  2px solid #00bce7 !important;
+}
+ .filestyle{
+     border-radius:5px 0 0 5px !important;
+ }
+
+ .form-check-input:checked {
+    background-color: #0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+}
+
+.form-check-input {
+    transform: scale(1.5);
+}
+
+#message-body::-webkit-scrollbar {
+    display: none;
+}

@@ -1,0 +1,65 @@
+﻿@model Practice.DAL.ViewModels.StudentData
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<div class="d-flex justify-content-between">
+    <h1>List Of Students</h1>
+    <div class="d-flex justify-content-end" id="buttonProvider">
+        <button type="button" class="btn btn-info text-white" onclick="CreateFormModal()">
+            Add Student
+        </button>
+    </div>
+</div>
+
+
+<table class="table table-bordered table-striped w-100 mt-2"> 
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Course</th>
+            <th>Grade</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model.studentList)
+        {
+            <tr>
+                <td>@obj.StudentId</td>
+                <td>@obj.FirstName</td>
+                <td>@obj.LastName</td>
+                <td>@obj.Email</td>
+                <td>@obj.Age</td>
+                <td>@obj.Gender</td>
+                <td>@obj.Course</td>
+                <td>@obj.Grade</td>
+                <td>
+                    <div class="d-flex justify-content-end" id="editbtn">
+                        <button type="button" class="btn btn-info text-white me-2" onclick="EditFormModal(@obj.StudentId)">
+                            Edit
+                        </button>
+                        <button type="button" class="btn btn-danger text-white" onclick="DeleteRow(@obj.StudentId)">
+                            delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+        
+    </tbody>
+
+</table>
+
+
+<div id="showCaseModal">
+
+</div>
+
+

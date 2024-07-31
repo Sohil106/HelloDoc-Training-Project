@@ -1,0 +1,153 @@
+﻿@model HelloDoc.DAL.ViewModels.Partnersvm;
+
+<div class="row d-flex justify-content-center mt-5">
+    <div class="col-md-8 col-11">
+        @*  <input type="text" asp-for="@Model.sendOrderModel.RequestId" hidden />
+        <input type="text" asp-for="@Model.StatusForName" id="statusForName" hidden /> *@
+
+        <div class="d-flex justify-content-between">
+            @if (@Model.vendorID == 0)
+            {
+                <h4>Add Business</h4>
+            }
+            else
+            {
+                <h4>Update Business</h4>
+            }
+            <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-bolder me-2" onclick="Partners(0)">
+                <i class="bi bi-caret-left"></i> Back
+            </a>
+        </div>
+        <form method="post" id="SubmitInfoForm" class="p-4 mt-1 shadow" onsubmit="CreateNewBusiness()">
+            <input asp-for="@Model.vendorID" hidden />
+            <h5 class="">Submit Information</h5>
+            <div class="row">
+                <div class="col-xl-6 mt-4 ">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="healthprofessionid" placeholder="Business Name" asp-for="@Model.BusinessName">
+                        <label for="healthprofessionid" class="text-secondary">Business Name</label>
+                        <span class="text-danger" asp-validation-for="@Model.BusinessName"></span> 
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <select class="form-select form-select-md  h-100 text-secondary" id="Profession" asp-for="@Model.SelectedhealthprofID">
+                            <option value="" selected disabled>Profession</option>
+                             @foreach (var obj in Model.Professions.ToList())
+                            {
+                                <option value="@obj.HealthProfessionalId">@obj.ProfessionName</option>
+                             }
+                        </select>
+                        <label for="ProfessionType">ProfessionType</label>
+                        <span class="text-danger" asp-validation-for="@Model.SelectedhealthprofID"></span>
+
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="text" asp-for="@Model.FAXNumber" class="form-control" id="floatingFaxNum" placeholder="Fax">
+                        <label for="floatingFaxNum" class="text-secondary">Fax Number</label>
+                        <span class="text-danger" asp-validation-for="@Model.FAXNumber"></span>
+
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="tel" asp-for="@Model.Phonenumber" class="form-control" id="FloatingPhoneNum" placeholder="Phone Number">
+                        <label for="FloatingPhoneNum" class="text-secondary">Phone Number</label>
+                         <span class="text-danger" asp-validation-for="@Model.Phonenumber"></span>
+                    </div>
+                </div>
+                @if (@Model.vendorID != 0)
+                {
+                    <div class="col-xl-6 mt-4">
+                        <div class="form-floating">
+                            <input type="email" asp-for = "@Model.Email" class="form-control" id="floatingEmail" placeholder="Email" disabled>
+                            <label for="floatingEmail" class="text-secondary">Email</label>
+                            <span class="text-danger" asp-validation-for="@Model.Email"></span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-xl-6 mt-4">
+                        <div class="form-floating">
+                            <input type="email" asp-for="@Model.Email" class="form-control" id="floatingEmail" placeholder="Email">
+                            <label for="floatingEmail" class="text-secondary">Email</label>
+                            <span class="text-danger" asp-validation-for="@Model.Email"></span>
+                        </div>
+                    </div>
+                }
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="text" asp-for="@Model.BusinessContact" class="form-control" id="floatingcontect" placeholder="Businesscontect">
+                        <label for="floatingcontect" class="text-secondary">BusinessContect</label>
+                         <span class="text-danger" asp-validation-for="@Model.BusinessContact"></span>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="text" asp-for="@Model.Street" class="form-control" id="floatingStreet" placeholder="Street">
+                        <label for="floatingStreet" class="text-secondary">Street</label>
+                        <span asp-validation-for="@Model.Street" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="text" asp-for="@Model.City" class="form-control" id="floatingCity" placeholder="City">
+                        <label for="floatingCity" class="text-secondary">City</label>
+                        <span asp-validation-for="@Model.City" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <select class="form-select regionDropdown" id="state" aria-label="Region" asp-for="@Model.RegionId" style="height: 58px;">
+                        <option selected="" disabled>State</option>
+                        @foreach (var obj in Model.regions.ToList())
+                        {
+                            <option value="@obj.RegionId">
+                                @obj.Name
+                            </option>
+                        }
+                    </select>
+                    <span class="text-danger" asp-validation-for="@Model.RegionId"></span>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="text" asp-for="@Model.Zip" class="form-control" id="floatingZipCode" placeholder="Zip Code">
+                        <label for="floatingZipCode" class="text-secondary">Zip Code</label>
+                        <span asp-validation-for="@Model.Zip" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 mt-5 ">
+                    <div class="d-flex justify-content-end">
+
+                        @if(Model.vendorID == 0)
+                        {
+                            <button type="submit" class="border-0 bg-transparent">
+                                <a class="btn  btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-bolder me-2">
+                                    Save
+                                </a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="border-0 bg-transparent" onclick="UpdateBusiness()">
+                                <a class="btn  btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-bolder me-2">
+                                    Save
+                                </a>
+                            </button>
+                        }
+                        <button type="reset" class="border-0 bg-transparent">
+                            <a class="btn  btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-bolder me-2">
+                                Cancel
+                            </a>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />

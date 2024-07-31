@@ -1,0 +1,164 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminCreateRequestvm;
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8 col-11">
+            <div class="d-flex  mb-3 justify-content-between">
+                <div class="mt-3">
+                    <h4>
+                        Submit Information
+                    </h4>
+                </div>
+
+                @if(Model.CallId == 3)
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-semibold me-2" onclick="GetProviderDashboard()">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-semibold me-2" onclick="GetDashboard(@Model.StatusForName)">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+            </div>
+            <div class="shadow p-4">           
+                <form method="post" enctype="multipart/form-data" id="AdminCreateRequestFormId" onsubmit="sendAdminCreateRequest(@Model.StatusForName,@Model.CallId)">
+                    <div class="row">
+                        <div class="col-12 ">
+                            <h5>Patient</h5>
+                        </div>
+                        <div class="col-xl-6 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.FirstName" class="form-control " id="floatingFirstName15" placeholder="First Name">
+                                <label for="floatingFirstName15" class="text-secondary">First Name</label>
+                                <span class="text-danger" asp-validation-for="FirstName"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-xl-2 mt-4 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.LastName" class="form-control" id="floatingLastName15" placeholder="Last Name">
+                                <label for="floatingLastName15" class="text-secondary">Last Name</label>
+                                <span class="text-danger" asp-validation-for="LastName"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="tel" asp-for="@Model.PhoneNo" class="form-control" id="phone25" placeholder="PhoneNumber" />
+                                <label for="phone25" class="text-secondary">PhoneNumber</label>
+                                <span class="text-danger" asp-validation-for="PhoneNo"></span>
+
+
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="email" asp-for="@Model.Email" class="form-control " id="floatingEmail15" placeholder="Email">
+                                <label for="floatingEmail15" class="text-secondary">Email</label>
+                                <span class="text-danger" asp-validation-for="Email"></span>
+
+
+                            </div>
+                        </div>  
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                @{
+                                    string max = DateTime.Now.ToString("yyyy-MM-dd");
+                                }
+                                <input max="@max" type="date" asp-for="@Model.DateOfBirth" class="form-control" id="floating3" placeholder="Date of Birth">
+                                <label for="floating3">Date of Birth (Optional)</label>
+                                <span class="text-danger" asp-validation-for="DateOfBirth"></span>                            
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <h5>Location</h5>
+                        </div>                      
+                        <div class="col-xl-6 mt-2 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.Street" class="form-control " id="floatingStreet" placeholder="Street">
+                                <label for="floatingStreet" class="text-secondary">Street</label>
+                                <span class="text-danger" asp-validation-for="Street"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 mt-xl-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.City" class="form-control " id="floatingCity" placeholder="City">
+                                <label for="floatingCity" class="text-secondary">City</label>
+                                <span class="text-danger" asp-validation-for="City"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <select id="regionId" class="form-select " aria-label="Default select example" asp-for="RegionId">
+                                    <option class="text-secondary" selected disabled>Select Any One</option>
+                                    @foreach (var obj in Model.Regions)
+                                    {
+                                        <option value="@obj.RegionId">
+                                            @obj.Name
+                                        </option>
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="RegionId"></span>
+                                <label for="floatingState" class="text-secondary">State</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <input asp-for="@Model.Zipcode" type="text" class="form-control " id="floatingZip" placeholder="Zip">
+                                <label for="floatingZip" class="text-secondary">Zip</label>
+                                <span class="text-danger" asp-validation-for="Zipcode"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input asp-for="@Model.Room" type="text" class="form-control " id="floatingAddress1" placeholder="Address1">
+                                <label for="floatingAddress1" class="text-secondary">Room #(Optional)</label>
+                                <span class="text-danger" asp-validation-for="Room"></span>
+                            </div>
+                        </div> 
+                        <div class="col-5 col-xl-2 form-floating mt-4 d-none">
+                            <a type="button" class="btn btn-outline-info border-info p-3 w-100" onclick="checkRegionAvailability()">
+                                <i class="bi bi-check2-circle fw-bold"></i>
+                                <span>Verify</span>
+                            </a>
+                        </div>
+                        <div class="col-5 col-xl-2 form-floating mt-4 d-none">
+                            <a type="button" class="btn btn-outline-info border-info p-3 w-100" href="https://www.google.com/maps/search/?api=1&query=" target="_blank" id="mapBtn">
+                                <i class="bi bi-geo-alt-fill fw-bold"></i>
+                                <span>Map</span>
+                            </a>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <h5>Notes</h5>
+                        </div>
+                        <div class="col-xl-12 mt-2">
+                            <div class="form-floating">
+                                <textarea asp-for="@Model.AdminNotes" class="form-control  h-100" rows="6" placeholder="Admin Notes" id="floatingTextarea2"></textarea>
+                                <label for="floatingTextarea2" class="text-secondary">Admin Notes</label>
+                                <span class="text-danger" asp-validation-for="AdminNotes"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end  mt-4">                           
+                            <button type="submit" id="savebtn" class="border-0 bg-transparent">
+                                <a class="btn  btn-info text-white fs-5  py-2 px-4 rounded fw-semibold me-2">
+                                    Submit
+                                </a>
+                            </button>
+                            <button type="reset" id="cancelbtn" class="border-0 bg-transparent">
+                                <a class="btn btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-semibold">
+                                    Cancel
+                                </a>
+                            </button>
+                        </div>
+                    </div>                                                    
+                </form>                
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<partial name="_ValidationScriptsPartial" />

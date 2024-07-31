@@ -1,0 +1,74 @@
+@{
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>landingpage</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @*************** toastr cdn ************@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="~/js/custom.js">
+
+</head>
+<body onload="checkMode()">
+    <partial name="_Notification" />
+
+    
+    <button class="btn btn-outline-info border border-2 border-info fs-5 px-2 py-1 rounded fw-bolder me-2 position-absolute modelogin"
+            id="dark-mode-btn">
+        <i id="moon" class="bi bi-moon"></i>
+        <i id="sun" class="bi bi-sun d-none"></i>
+    </button>
+    <div class="container-fluid">
+        <div class="row justify-content-center ">
+            <div class=" mt-5">
+                <div class="row mainbox ">
+                    <div class="col-12 d-flex flex-column justify-content-center align-items-center mt-4">
+                        <img src="~/images/MainLogo.png" alt="" style="height: 14vh;">
+                    </div>
+
+
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-xl-5 ">
+                            <form class="align-items-center d-flex flex-column ">
+                                <div class="mb-4 w-100">
+                                    <a asp-action="SubmitRequest" asp-controller="PatientSide" type="submit" value="Submit" class="btn text-light" style=" height: 58px; background-color: #00bce7 ; text-transform: capitalize;display: flex;justify-content: center; align-items: center;">Submit a Request</a>
+                                </div>
+                                <div class="w-100">
+                                    <a asp-action="Login" asp-controller="PatientSide" type="submit" class="btn text-light" style=" height: 58px; background-color: rgb(9, 20, 60);text-transform: capitalize;display: flex;justify-content: center; align-items: center;">Registered Patients</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 d-flex flex-column  justify-content-end mb-1">
+                        <footer class="text-center text-lg-start">
+                            <!-- Copyright -->
+                            <div class="text-center p-3">
+                                Terms of Conditions |
+                                <a class="text-body text-decoration-none" href="https://mdbootstrap.com/">Privacy Policy</a>
+                            </div>
+                            <!-- Copyright -->
+                        </footer>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <script src="~/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/dark-theme.js" asp-append-version="true"></script>
+
+
+</body>
+</html>

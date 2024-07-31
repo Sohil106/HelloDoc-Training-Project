@@ -1,0 +1,94 @@
+﻿@model Practice.DAL.ViewModels.StudentData
+
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h2 class="modal-title fs-5" id="exampleModalLabel">Student Form</h2>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form method="post" id="CreateForm" onsubmit="PostCreateForm()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="StudentInfo.FirstName" class="form-control" id="floatingFirstName" placeholder="First Name">
+                                <label for="floatingFirstName" class="text-secondary">First Name</label>
+                                <span class="text-danger" asp-validation-for="StudentInfo.FirstName"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <div class="form-floating">
+                                <input type="tel" asp-for="StudentInfo.LastName" class="form-control" id="floatingLastName" placeholder="Last Name">
+                                <label for="floatingLastName" class="text-secondary">Last Name</label>
+                                <span class="text-danger" asp-validation-for="StudentInfo.LastName"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-4">
+                            <div class="form-floating">
+                                <input type="email" asp-for="StudentInfo.Email" class="form-control someinput" id="floatingEmail" placeholder="Email">
+                                <label for="floatingEmail" class="text-secondary">Email</label>
+                                <span class="text-danger" asp-validation-for="StudentInfo.Email"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-4">
+                            <div class="form-floating">
+                                @{
+                                    string max = DateTime.Now.ToString("yyyy-MM-dd");
+                                }
+                                <input max="@max" type="date"  class="form-control" value="" id="floating3">
+                                <label for="floating3">Date of Birth</label>                           
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="d-flex form-floating">
+                                <select class="form-select form-select-md  h-100 text-secondary" id="abc" aria-label="meadiam select example" asp-for="StudentInfo.Gender">
+                                    <option selected disabled>Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>                                  
+                                </select>
+                                <label for="abc">Gender</label>
+                            </div>
+                            <span class="text-danger" asp-validation-for="StudentInfo.Gender"></span>
+                        </div>
+                        <div class="col-6 mt-4">
+                            <div class="d-flex form-floating">
+                                <select class="form-select form-select-md  h-100 text-secondary" id="def" aria-label="meadiam select example" asp-for="StudentInfo.Grade">
+                                    <option selected disabled>Grade</option>
+                                    <option value="1st-3rd">1st-3rd</option>
+                                    <option value="4th-6th">4th-6th</option>
+                                    <option value="7th-8th">7th-8th</option>
+                                    <option value="9th-12th">9th-12th</option>
+                                </select>
+                                <label for="abc">Grade</label>
+                            </div>
+                                <span class="text-danger" asp-validation-for="StudentInfo.Grade"></span>
+                        </div>
+                        <div class="col-6 mt-4">
+                            <div class="form-floating">
+                                <select class="form-select form-control" id="Course" asp-for="StudentInfo.CourseId">
+                                    <option selected disabled>Course</option>
+                                @foreach(var obj in Model.courses)
+                                {
+                                <option value="@obj.Courseid">@obj.Name</option>      
+                                }
+                                </select>
+                                <label for="Course">Course</label>
+                                <span class="text-danger" asp-validation-for="StudentInfo.CourseId"></span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn btn-info text-white me-2">Save</button>
+                        <button type="button" class="btn  text-info border-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<partial name="_ValidationScriptsPartial" />

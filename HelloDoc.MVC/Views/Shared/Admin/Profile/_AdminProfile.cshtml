@@ -1,0 +1,320 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminProfilevm;
+@{
+    ViewData["Title"] = "Admin Profile";
+}
+
+
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8 col-11">
+            <div class="d-flex  mb-3 justify-content-between">
+                <div class="mt-3">
+                    <h4>
+                        My Profle
+                    </h4>
+                </div>
+
+                @if (Model.callId == 2)
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-semibold me-2" onclick="GetUserAccess(0)">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+            </div>
+            <div class="shadow p-4">
+                <form method="post" id="resetpassForm" class="allForm" onsubmit="UpdatePassword(@Model.callId)">
+                    <div class="row">
+                        <input type="text" id="aspnetuserId1" asp-for="@Model.AspNetUserId" value="@Model.AspNetUserId" hidden />
+                        <input type="text" id="adminId1" asp-for="@Model.AdminRegions" value="@Model.AdminRegions" hidden />
+                        <input type="text" id="rolesid1" asp-for="@Model.Roles" value="@Model.Roles" hidden />
+                        <input type="text" id="regionsid1" asp-for="@Model.Regions" value="@Model.Regions" hidden />
+
+
+                        <div class="col-xl-12 ">
+                            <h5>Account Information</h5>
+                        </div>
+                        <div class="col-xl-6 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.UserName" class="form-control" id="floatingUserName" placeholder="User Name">
+                                <label for="floatingUserName" class="text-secondary">User Name</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-xl-2 mt-4">
+                            <div class="form-floating">
+                                <input type="password" asp-for="@Model.Password" class="form-control" id="floatingPassword10" placeholder="Password" autocomplete="on">
+                                <label for="floatingPassword" class="text-secondary">Password</label>
+                                <span class="text-danger" asp-validation-for="@Model.Password"></span>
+                                <div class="eye-icon position-absolute top-0 end-0 mx-3 my-2">
+                                    <i class="bi bi-eye-slash fs-4 text-muted mt-1 common-cursor-pointer" id="togglePassword10" onclick="showPassword()"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <select class="form-select" id="floatingSelectStatus" aria-label="Status">
+                                    <option>Select Your Status</option>
+                                    <option value="1" selected>Active</option>
+                                    <option value="2">Inactive</option>
+
+                                </select>
+                                <label for="floatingSelectStatus">Status</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <select class="form-select form-control disabled" id="Role" asp-for="@Model.RoleId">
+                                    @foreach (var obj in Model.Roles)
+                                    {
+                                        <option value="@obj.RoleId">
+                                            @obj.Name
+                                        </option>
+                                    }
+                                </select>
+                                <label for="Role" class="ms-2 ">Role</label>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-4 d-flex justify-content-end">
+                            <button type="submit" id="resetpassbtn" class="border-0 bg-transparent">
+                                <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-semibold me-2">
+                                    Reset Password
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <form method="post" class="allForm" id="admininfoForm" onsubmit="UpdateInfoForm(@Model.callId)">
+                    <div class="row">
+                        <input type="text" id="aspnetuserId2" asp-for="@Model.AspNetUserId" value="@Model.AspNetUserId" hidden />
+                        <input type="text" id="adminId2" asp-for="@Model.AdminId" value="@Model.AdminId" hidden />
+                        <input type="text" id="aregion2" asp-for="@Model.AdminRegions" value="@Model.AdminRegions" hidden />
+                        <input type="text" id="rolesid2" asp-for="@Model.Roles" value="@Model.Roles" hidden />
+
+
+
+                        <div class="col-12 mt-4">
+                            <h5>Administrator Information</h5>
+                        </div>
+                        <div class="col-xl-6 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.FirstName" class="form-control " id="floatingFirstName15" placeholder="First Name">
+                                <label for="floatingFirstName15" class="text-secondary">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-xl-2 mt-4 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.LastName" class="form-control" id="floatingLastName15" placeholder="Last Name">
+                                <label for="floatingLastName15" class="text-secondary">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="email" asp-for="@Model.Email" class="form-control " id="floatingEmail15" placeholder="Email">
+                                <label for="floatingEmail15" class="text-secondary">Email</label>
+                                <span class="text-danger" asp-validation-for="@Model.Email"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input type="email" asp-for="@Model.ConfirmEmail" class="form-control" id="floatingConfirmEmail16" placeholder="ConfirmEmail">
+                                <label for="floatingConfirmEmail16" class="text-secondary">Confirm Email</label>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            <div class="form-floating">
+                                <input id="phone25" asp-for="@Model.PhoneNumber" type="tel" class="editfield1 form-control "/>
+                                <label for="phone25" class="text-secondary">Phone Number</label>
+                                <span class="text-danger" asp-validation-for="@Model.PhoneNumber"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4">
+                            @foreach (var obj in Model.AdminRegions)
+                            {
+                                <div class="form-check form-check-inline p-3 mx-3">
+                                    <input class="form-check-input  editfield1" name="regions" type="checkbox" @(obj.ExistsInTable ? "checked" : "") id="@obj.Regionid" value="@obj.Regionid">
+                                    <label class="form-check-label" for="@obj.Regionid">@obj.Name</label>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="col-12 mt-4 d-flex justify-content-end">
+                            <button type="button" id="editbtn1" class="border-0 bg-transparent">
+                                <a class="btn  btn-info text-white fs-5  py-2 px-4 rounded fw-semibold me-2">
+                                    Edit
+                                </a>
+                            </button>
+                            <button type="submit" id="savebtn1" class="border-0 bg-transparent" style="display:none">
+                                <a class="btn  btn-info text-white fs-5  py-2 px-4 rounded fw-semibold me-2">
+                                    Save
+                                </a>
+                            </button>
+                            <button type="reset" id="cancelbtn1" class="border-0 bg-transparent" style="display:none">
+                                <a class="btn btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-semibold">
+                                    Cancel
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <form method="post" class="allForm" id="mailingForm" onsubmit="UpdateMailingForm(@Model.callId)">
+                    <div class="row">
+                        <input type="text" id="aspnetuserId3" asp-for="@Model.AspNetUserId" value="@Model.AspNetUserId" hidden />
+                        <input type="text" id="adminid3" asp-for="@Model.AdminId" value="@Model.AdminId" hidden />
+                        <input type="text" id="regionsid3" asp-for="@Model.AdminRegions" value="@Model.AdminRegions" hidden />
+                        <input type="text" id="regionsid5" asp-for="@Model.Regions" value="@Model.Regions" hidden />
+                        <input type="text" id="rolesid3" asp-for="@Model.Roles" value="@Model.Roles" hidden />
+
+                        <div class="col-12 mt-4">
+                            <h5>Mailing And Billing Information</h5>
+                        </div>
+                        <div class="col-xl-6 mt-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.Address1" class="form-control editfield2" id="floatingAddress1" placeholder="Address1">
+                                <label for="floatingAddress1" class="text-secondary">Address1</label>
+                                <span class="text-danger" asp-validation-for="@Model.Address1"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 mt-xl-2">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.Address2" class="form-control editfield2" id="floatingAddress2" placeholder="Address2">
+                                <label for="floatingAddress2" class="text-secondary">Address2</label>
+                                <span class="text-danger" asp-validation-for="@Model.Address2"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.City" class="form-control editfield2" id="floatingCity" placeholder="City">
+                                <label for="floatingCity" class="text-secondary">City</label>
+                                <span class="text-danger" asp-validation-for="@Model.City"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <select class=" form-select regionDropdown editfield2 id="state" asp-for="@Model.RegionId" aria-label="Region">
+                                    @foreach (var obj in Model.Regions)
+                                    {
+                                        <option value="@obj.RegionId">
+                                            @obj.Name
+                                        </option>
+                                    }
+                                </select>
+                                <label for="state" class="ms-2 ">State</label>
+                                <span class="text-danger" asp-validation-for="@Model.RegionId"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <input type="text" asp-for="@Model.Zipcode" class="form-control editfield2" id="floatingZip" placeholder="Zip">
+                                <label for="floatingZip" class="text-secondary">Zip</label>
+                                <span class="text-danger" asp-validation-for="@Model.Zipcode"></span>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mt-4 ">
+                            <div class="form-floating">
+                                <input id="phone26" asp-for="@Model.AltPhone" type="tel" class="form-control editfield2" style="height:56px;" />
+                                <label for="phone26" class="text-secondary">Phone Number</label>
+                                <span class="text-danger" asp-validation-for="@Model.AltPhone"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 d-flex justify-content-end  mt-4">
+                            <button type="button" id="editbtn2" class="border-0 bg-transparent">
+                                <a class="btn  btn-info text-white fs-5  py-2 px-4 rounded fw-semibold me-2">
+                                    Edit
+                                </a>
+                            </button>
+                            <button type="submit" id="savebtn2" class="border-0 bg-transparent" style="display:none">
+                                <a class="btn  btn-info text-white fs-5  py-2 px-4 rounded fw-semibold me-2">
+                                    Save
+                                </a>
+                            </button>
+                            <button type="reset" id="cancelbtn2" class="border-0 bg-transparent" style="display:none">
+                                <a class="btn btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-semibold">
+                                    Cancel
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end  mt-4">
+                            @if (Model.callId == 2)
+                            {
+                                <button type="button" id="DeleteAccount" class="btn btn-danger" onclick="DeleteAdminAccount(@Model.AdminId)">
+                                    Delete Account
+                                </button>
+                            }
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<partial name="_ValidationScriptsPartial" />
+
+
+<script>
+    // const phoneInputField25 = document.querySelector(".phone25");
+    // const phoneInput25 = window.intlTelInput(phoneInputField25, {
+    //     utilsScript:
+    //         "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    // });
+    // const phoneInputField26 = document.querySelector(".phone26");
+    // const phoneInput26 = window.intlTelInput(phoneInputField26, {
+    //     utilsScript:
+    //         "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    // });
+
+    $(".allForm input:not(:password), .allForm textarea, .allForm select").prop("disabled", true);
+
+    $('#editbtn1').on('click', function (e) {
+        e.preventDefault();
+        $('.editfield1').attr('disabled', false);
+        $(this).hide();
+        $('#savebtn1').show();
+        $('#cancelbtn1').show();
+
+    });
+
+    $('#cancelbtn1').on('click', function (e) {
+        e.preventDefault();
+        $('.editfield1').closest('form').trigger('reset');
+        $('.editfield1').attr('disabled', true);
+        $(this).hide();
+        $('#savebtn1').hide();
+        $('#editbtn1').show();
+
+    });
+
+
+    $('#editbtn2').on('click', function (e) {
+        e.preventDefault();
+        $('.editfield2').attr('disabled', false);
+        $(this).hide();
+        $('#savebtn2').show();
+        $('#cancelbtn2').show();
+
+    });
+
+    $('#cancelbtn2').on('click', function (e) {
+        e.preventDefault();
+        $('.editfield2').closest('form').trigger('reset');
+        $('.editfield2').attr('disabled', true);
+        $(this).hide();
+        $('#savebtn2').hide();
+        $('#editbtn2').show();
+
+    });
+
+    function showPassword() {
+
+        const togglePassword = document.querySelector("#togglePassword10");
+        const password = document.querySelector("#floatingPassword10");
+
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        document.getElementById("togglePassword10").classList.toggle('bi-eye');
+    }
+</script>

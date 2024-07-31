@@ -1,0 +1,27 @@
+Good Morning All !
+Training Portal :
+http://training.anasource.com/
+
+Username: trainee
+Password: Tra%2023%
+Start learning ASP .net Coding standards from above portal
+
+
+Email ID -sohil.vekariya@etatvasoft.com
+Email Pass -P}YTr!eUgg9z
+
+tatva.dotnet.sohilvekariya123@outlook.com
+Devjibapa@2023
+
+\\192.168.1.232\dotnet\Source\SQL
+
+Scafold
+Scaffold-DbContext "User ID = postgres;Password=11122002;Server=localhost;Port=5432;Database=HelloDoc;Integrated Security=true;Pooling=true;" Npgsql.EntityFrameworkCore.PostgreSQL -OutputDir Models –context "ApplicationDbContext" –contextDir "DataContext" -f -DataAnnotations;
+
+//.net course
+https://dotnetmastery.com/Home/Details?courseId=9 
+
+https://learn.microsoft.com/en-us/dotnet/csharp/linq/get-started/introduction-to-linq-queries
+
+Scafold demo
+ Scaffold-DbContext "User ID = postgres;Password=11122002;Server=localhost;Port=5432;Database=Practice;Integrated Security=true;Pooling=true;" Npgsql.EntityFrameworkCore.PostgreSQL -OutputDir Models –context "ApplicationDbContext" –contextDir "DataContext" -f -DataAnnotations;

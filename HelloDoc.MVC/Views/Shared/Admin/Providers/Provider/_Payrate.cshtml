@@ -1,0 +1,130 @@
+﻿@model HelloDoc.DAL.ViewModels.ProviderProfilevm;
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8 col-11">
+            <div class="d-flex  mb-3 justify-content-between">
+               
+                    <div>
+                        <h4>
+                            Payrate
+                        </h4>
+                    </div>
+                @if(Model.callId == 1)
+                {
+                    <div>
+                        <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-semibold me-2" onclick="GetEditProvider('@Model.AspId',1)">
+                            <i class="bi bi-caret-left"></i> Back
+                        </a>
+                    </div>
+                }
+                else if(Model.callId == 2)
+                {
+                    <div>
+                        <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-semibold me-2" onclick="GetEditProvider('@Model.AspId',2)">
+                            <i class="bi bi-caret-left"></i> Back
+                        </a>
+                    </div>
+                }
+
+            </div>
+            <div class="shadow p-4">
+                <form method="post" id="PayrateFrom" onsubmit="SetPayrate(@Model.callId)">
+                    <input type="text" id="payratePhysician" asp-for="payrateData.PhysicianId" hidden/>
+                    <input type="text" id="payrateAspId" asp-for="@Model.AspId" hidden/>
+                    <div class="table-responsive">
+                        <table class="table PayrateTable">
+                            <thead class="rounded" style="background-color: #f4f3ef;">
+                                <tr>
+                                    <th style="background: transparent;">Category</th>
+                                    <th style="background: transparent;">Payrate</th>                               
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="align-middle">
+                                    <td>NightShift_Weekend</td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <input type="text" asp-for="payrateData.NightShiftWeekend" class="form-control " id="floatingWeekend" placeholder="Weekend">
+                                            <label for="floatingWeekend" class="text-secondary">Payrate</label>
+                                            <span class="text-danger" asp-validation-for="payrateData.NightShiftWeekend"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <td>Shift</td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <input type="text" asp-for="payrateData.Shift" class="form-control " id="floatingShift" placeholder="Shift">
+                                            <label for="floatingShift" class="text-secondary">Payrate</label>
+                                            <span class="text-danger" asp-validation-for="payrateData.Shift"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <td>HousCalls_Nights_Weekend</td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <input type="text" asp-for="payrateData.HouseCallNightsWeekend" class="form-control " id="floatingHousCallsNightsWeekend" placeholder="HousCalls Nights Weekend">
+                                            <label for="floatingHousCallsNightsWeekend" class="text-secondary">Payrate</label>
+                                            <span class="text-danger" asp-validation-for="payrateData.HouseCallNightsWeekend"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <td>PhoneConsults</td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <input type="text" asp-for="payrateData.PhoneConsults" class="form-control " id="floatingPhoneConsults" placeholder="PhoneConsults">
+                                            <label for="floatingPhoneConsults" class="text-secondary">Payrate</label>
+                                            <span class="text-danger" asp-validation-for="payrateData.PhoneConsults"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <td>PhoneConsults_Nights_Weekend</td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <input type="text" asp-for="payrateData.PhoneConsultsNightsWeekend" class="form-control " id="floatingPhoneConsultsNightsWeekend" placeholder="PhoneConsults Nights Weekend">
+                                            <label for="floatingPhoneConsultsNightsWeekend" class="text-secondary">Payrate</label>
+                                            <span class="text-danger" asp-validation-for="payrateData.PhoneConsultsNightsWeekend"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <td>BatchTesting</td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <input type="text" asp-for="payrateData.BatchTesting" class="form-control " id="floatingBatchTesting" placeholder="BatchTesting">
+                                            <label for="floatingBatchTesting" class="text-secondary">Payrate</label>
+                                            <span class="text-danger" asp-validation-for="payrateData.BatchTesting"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="align-middle">
+                                    <td>HouseCalls</td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <input type="text" asp-for="payrateData.HouseCalls" class="form-control " id="floatingHouseCalls" placeholder="HouseCalls">
+                                            <label for="floatingHouseCalls" class="text-secondary">Payrate</label>
+                                            <span class="text-danger" asp-validation-for="payrateData.HouseCalls"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" id="savebtn1" class="border-0 bg-transparent">
+                            <a class="btn  btn-info text-white fs-5  py-2 px-4 rounded fw-semibold me-2">
+                                Edit
+                            </a>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<partial name="_ValidationScriptsPartial" />

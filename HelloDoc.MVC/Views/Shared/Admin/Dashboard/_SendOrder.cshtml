@@ -1,0 +1,117 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminDashvm;
+
+<div class="row d-flex justify-content-center mt-5">
+    <div class="col-md-8 col-11">
+        <form method="post" id="sendOrderForm" onsubmit="UpdateSendOrder(@Model.sendOrderModel.RequestId)" class="p-4 shadow">
+            <input type="text" asp-for="@Model.sendOrderModel.RequestId" hidden />
+            <input type="text" asp-for="@Model.StatusForName" id="statusForName"  hidden/>
+            <input type="text" asp-for="@Model.CallId" id="orderCallId" hidden />
+
+            <div class="d-flex justify-content-between">
+                <div class="">
+                    <h5>
+                        Send Order
+                    </h5>
+                </div>
+                @if(Model.CallId == 3)
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-bolder me-2" onclick="GetProviderDashboard()">
+                    <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-info border border-2 border-info fs-5 p-2 rounded fw-bolder me-2" onclick="GetDashboard(@Model.StatusForName)">
+                        <i class="bi bi-caret-left"></i> Back
+                    </a>
+                }
+            </div>
+
+            <div class="row">
+
+                <div class="col-xl-6 mt-4">
+                    <div class="d-flex form-floating">
+                        <select class="form-select form-select-md  h-100 text-secondary" aria-label="meadiam select example" onchange="FilterSendOrder(this.value)">
+                            <option selected>Select Proffesion</option>
+                            @foreach(var obj in Model.healthProfessionalTypes)
+                            {
+                                 <option value="@obj.HealthProfessionalId">@obj.ProfessionName</option>                               
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4 ">
+                    <div class="d-flex form-floating">
+                        <select class="form-select form-select-md  h-100 text-secondary" id="healthprofessionid" aria-label="meadiam select example" asp-for="@Model.sendOrderModel.VendorId" onchange="VendorData(this.value)">
+                            <option selected disabled>Business</option>
+                            @foreach(var obj in Model.healthProfessionals)
+                            {
+                                <option value="@obj.VendorId">@obj.VendorName</option>                                
+                            }
+                        </select>                   
+                    </div>
+                    <span class="text-danger" asp-validation-for="@Model.sendOrderModel.VendorId"></span>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="text" asp-for="sendOrderModel.BusinessContact" class="form-control" id="floatingcontect" placeholder="Businesscontect">
+                        <label for="floatingcontect" class="text-secondary">BusinessContect</label>
+                        <span class="text-danger" asp-validation-for="sendOrderModel.BusinessContact"></span>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="email" asp-for="sendOrderModel.Email" class="form-control" id="floatingEmail" placeholder="Email">
+                        <label for="floatingEmail" class="text-secondary">Email</label>
+                        <span class="text-danger" asp-validation-for="sendOrderModel.Email"></span>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="form-floating">
+                        <input type="text" asp-for="sendOrderModel.FaxNum"  class="form-control" id="floatingFaxNum" placeholder="Fax">
+                        <label for="floatingFaxNum" class="text-secondary">Fax Number</label>
+                        <span class="text-danger" asp-validation-for="sendOrderModel.FaxNum"></span>
+
+                    </div>
+                </div>
+                <div class="col-xl-12 mt-4">
+                    <div class="form-floating">
+                        <textarea class="form-control" asp-for="sendOrderModel.Prescription" placeholder="Leave a comment here" id="floatingTextarea27"
+                                  style="height: 100px"></textarea>
+                        <label for="floatingTextarea27" class="text-secondary">Prescription or Order Details</label>
+                        <span class="text-danger" asp-validation-for="sendOrderModel.Prescription"></span>
+                    </div>
+                </div>
+                <div class="col-xl-6 mt-4">
+                    <div class="d-flex form-floating">
+                        <select class="form-select form-select-md  h-100 text-secondary" asp-for="sendOrderModel.Refil" aria-label="meadiam select example">
+                            <option selected>Number of Refills</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-12 mt-5 ">
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="border-0 bg-transparent">
+                            <a class="btn  btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-bolder me-2">
+                                Submit
+                            </a>
+                        </button>
+                        <button type="reset" class="border-0 bg-transparent">
+                            <a class="btn  btn-outline-info border border-2 border-info fs-5  p-2 rounded fw-bolder me-2">
+                                Cancel
+                            </a>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />

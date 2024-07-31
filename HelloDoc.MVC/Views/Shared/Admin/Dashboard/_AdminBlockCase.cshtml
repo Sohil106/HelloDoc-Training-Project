@@ -1,0 +1,38 @@
+﻿@model HelloDoc.DAL.ViewModels.AdminDashvm
+
+@* block model *@
+<div class="modal fade" id="blockModalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Block</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form id="blockCaseForm" method="post" onsubmit="BlockCase(@Model.blockCaseModel.RequestId)">
+                <div class="modal-body">
+                    <input type="text"  asp-for="@Model.blockCaseModel.RequestId" hidden/>
+                    <input type="text" asp-for="@Model.StatusForName" id="statusForName" hidden />
+                    <div class="text-secondary">
+                        Patient Name : <span class="text-info"> @Model.blockCaseModel.Name</span>
+                    </div>
+                    <div class="mt-4 mb-3 ">
+                        <div class="form-floating">
+                            <textarea class="form-control " asp-for="@Model.blockCaseModel.Reason" style="height:100px" placeholder="Leave a comment here" id="floatingTextarea3"></textarea>
+                            <label for="floatingTextarea3" class="text-secondary">Reason For Block Request</label>
+                            <span class="text-danger" asp-validation-for="@Model.blockCaseModel.Reason"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-info text-white me-2">Confirm</button>
+                        <button type="button" class="btn  text-info border-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
