@@ -339,9 +339,9 @@ html[data-bs-theme="dark"] .modal-dark {
 
 /************************************************provider list table *******************************************************/
 .providertable thead tr td {
-    background-color: #f2f2f2c4;
+    /*background-color: #f2f2f2c4;*/
     font-weight: 600;
-    color: #3c3734;
+    color: #777;
 }
 
 .providertable tbody tr td {
@@ -360,9 +360,9 @@ html[data-bs-theme="dark"] .modal-dark {
 
 
 .AccountAccessTable thead tr th {
-    background-color: #f2f2f2c4 ;
+    /*background-color: #f2f2f2c4 ;*/
     font-weight: 600;
-    color: #3c3734;
+    color: #777;
 }
 
 .AccountAccessTable tbody tr td {

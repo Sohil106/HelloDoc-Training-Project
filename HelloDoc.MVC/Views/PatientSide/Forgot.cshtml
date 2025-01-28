@@ -46,7 +46,7 @@
                     <div class="col-12 d-flex flex-column justify-content-center align-items-center">
                         <form method="post" class="col-xl-5 col-11">
                             <div>
-                                <a asp-action="Login" asp-controller="PatientSide" class="alllinks text-decoration-none"> &lt Back </a>
+                                <a asp-action="Login" asp-controller="PatientSide" class="alllinks text-decoration-none"> <i class="bi bi-caret-left"></i> Back </a>
                             </div>
 
                             <h3 class="mt-2 mb-5">Reset Your Password</h3>
@@ -61,7 +61,11 @@
                             </div>
                             <button type="submit" class="btn btn-info mt-1 userbuttons text-light">Reset Password</button>
 
-                            <div class="text-center mt-4">@Html.ActionLink("< Back to login", "Login", "PatientSide", null, new { @class = "alllinks text-decoration-none" })</div>
+                            <div class="text-center mt-4">
+                                <a href="@Url.Action("Login", "PatientSide")" class="alllinks text-decoration-none">
+                                    <i class="bi bi-caret-left"></i> Back to login
+                                </a>
+                            </div>
 
                         </form>
                     </div>

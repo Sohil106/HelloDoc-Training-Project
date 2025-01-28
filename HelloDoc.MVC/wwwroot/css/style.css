@@ -262,3 +262,7 @@ label {
 #message-body::-webkit-scrollbar {
     display: none;
 }
+
+.form-floating > .form-control:focus ~ label::after, .form-floating > .form-control:not(:placeholder-shown) ~ label::after, .form-floating > .form-select ~ label::after {
+    background-color: transparent !important;
+}
